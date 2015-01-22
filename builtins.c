@@ -6,7 +6,7 @@
 /*   By: bbarakov <bbarakov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/21 19:22:17 by bbarakov          #+#    #+#             */
-/*   Updated: 2015/01/21 20:00:36 by bbarakov         ###   ########.fr       */
+/*   Updated: 2015/01/22 20:39:07 by bbarakov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,8 @@ void		env_builtin(char **env)
 		++i;
 	}
 }
-void		cd_builtin(char **cmd, char ***environ)
+
+void		cd_builtin(char **cmd, char ***env)
 {
 	int			i;
 	char		cwdbuf[4096];
@@ -36,25 +37,29 @@ void		cd_builtin(char **cmd, char ***environ)
 		return ;
 	}
 	getcwd(cwdbuf, 4096);
-	while ((*environ)[i])
+	while ((*env)[i])
 	{
-		if (ft_strncmp((*environ)[i], "PWD=", 4) == 0)
+		if (ft_strncmp((*env)[i], "PWD=", 4) == 0)
 		{
-			// free((*environ)[i]);
-			// (*environ)[i] = 0;
-			(*environ)[i] = ft_strjoin("PWD=", cwdbuf);
+			free((*env)[i]);
+			(*env)[i] = 0;
+			(*env)[i] = ft_strjoin("PWD=", cwdbuf);
 			return ;
 		}
 		++i;
 	}
 }
 
-void		opt_builtin(char **cmd, char ***environ)
+void		opt_builtin(char **cmd, char ***env)
 {
     if (!ft_strcmp(cmd[0], "cd"))
-		cd_builtin(cmd, environ);
-	if (!ft_strcmp(cmd[0], "exit"))
+		cd_builtin(cmd, env);
+	else if (!ft_strcmp(cmd[0], "exit"))
 		exit(0);
-	if (!ft_strcmp(cmd[0], "env"))
-		env_builtin(*environ);
+	else if (!ft_strcmp(cmd[0], "env"))
+		env_builtin(*env);
+	else if (!ft_strcmp(cmd[0], "setenv"))
+		setenv_builtin(cmd, env);
+	else if (!ft_strcmp(cmd[0], "unsetenv"))
+		unsetenv_builtin(cmd, env);
 }
