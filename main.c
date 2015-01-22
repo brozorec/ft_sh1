@@ -15,9 +15,9 @@
 int			get_cmd(char *line, char ***cmd)
 {
 	*cmd = ft_strsplit(line, ' ');
-	if (!ft_strcmp(*cmd[0], "cd") || !ft_strcmp(*cmd[0], "setenv") ||
-		!ft_strcmp(*cmd[0], "unsetenv") || !ft_strcmp(*cmd[0], "exit") ||
-		!ft_strcmp(*cmd[0], "env"))
+	if (!ft_strcmp(**cmd, "cd") || !ft_strcmp(**cmd, "setenv") ||
+		!ft_strcmp(**cmd, "unsetenv") || !ft_strcmp(**cmd, "exit") ||
+		!ft_strcmp(**cmd, "env"))
 		return (1);
 	return (0);
 }

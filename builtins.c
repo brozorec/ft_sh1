@@ -36,15 +36,13 @@ void		cd_builtin(char **cmd, char ***environ)
 		return ;
 	}
 	getcwd(cwdbuf, 4096);
-	while (*environ[i])
+	while ((*environ)[i])
 	{
-		ft_putstr(*environ[i]);
-		ft_putstr("\n");
-		if (ft_strncmp(*environ[i], "PWD=", 4) == 0)
+		if (ft_strncmp((*environ)[i], "PWD=", 4) == 0)
 		{
-//			free(*environ[i]);
-//			*environ[i] = 0;
-			*environ[i] = ft_strjoin("PWD=", cwdbuf);
+			// free((*environ)[i]);
+			// (*environ)[i] = 0;
+			(*environ)[i] = ft_strjoin("PWD=", cwdbuf);
 			return ;
 		}
 		++i;
