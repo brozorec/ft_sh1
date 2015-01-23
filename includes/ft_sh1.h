@@ -6,7 +6,7 @@
 /*   By: bbarakov <bbarakov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/20 15:51:32 by bbarakov          #+#    #+#             */
-/*   Updated: 2015/01/22 20:44:57 by bbarakov         ###   ########.fr       */
+/*   Updated: 2015/01/23 13:53:23 by bbarakov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@ char		**set_my_env(char **environ, char *str, int cmp, int flag);
 void		setenv_builtin(char **cmd, char ***env);
 void		unsetenv_builtin(char **cmd, char ***env);
 void		env_builtin(char **env);
+void		cd_builtin(char **cmd, char ***env);
 int			get_len(char **ptr, int flag);
+int			compare(char *cmd, char *env);
 
 #endif

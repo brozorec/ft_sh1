@@ -6,48 +6,66 @@
 /*   By: bbarakov <bbarakov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/21 19:22:17 by bbarakov          #+#    #+#             */
-/*   Updated: 2015/01/22 20:39:07 by bbarakov         ###   ########.fr       */
+/*   Updated: 2015/01/23 15:33:23 by bbarakov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/ft_sh1.h"
 
-void		env_builtin(char **env)
+int			compare(char *cmd, char *env)
 {
-	int			i;
+    int			i;
 
 	i = 0;
-	while (env[i])
-	{
-		ft_putstr(env[i]);
-		ft_putstr("\n");
+	while (env[i] && env[i] != '=')
 		++i;
-	}
+	if (ft_strncmp(env, cmd, i) == 0)
+		return (i);
+	return (0);
 }
 
-void		cd_builtin(char **cmd, char ***env)
+int			get_len(char **ptr, int flag)
 {
-	int			i;
-	char		cwdbuf[4096];
+	int		i;
 
 	i = 0;
-	if (chdir(cmd[1]) == -1)
-	{
-		write(2 ,"error cd\n", 9);
-		return ;
-	}
-	getcwd(cwdbuf, 4096);
-	while ((*env)[i])
-	{
-		if (ft_strncmp((*env)[i], "PWD=", 4) == 0)
-		{
-			free((*env)[i]);
-			(*env)[i] = 0;
-			(*env)[i] = ft_strjoin("PWD=", cwdbuf);
-			return ;
-		}
+	while (ptr[i])
 		++i;
+	if (flag == 1)
+		return (i + 1);
+	else if (flag == -1)
+		return (i - 1);
+	return (i);
+}
+
+char		**set_my_env(char **environ, char *str, int cmp, int flag)
+{
+	int			i;
+	int			j;
+	int			len;
+	char		**env;
+
+	i = 0;
+	j = 0;
+	len = get_len(environ, flag);
+	if ((env = (char **)malloc(sizeof(char *) * (len + 1))) == 0)
+		return (0);
+	while (environ[i])
+	{
+		if (flag == -1 && str && ft_strncmp(environ[i], str, cmp) == 0)
+		{
+			++i;
+			continue;
+		}
+		env[j++] = ft_strdup(environ[i++]);
 	}
+	if (flag == 1)
+	{
+		env[j] = ft_strdup(str);
+		free(str);
+	}
+	env[len] = 0;
+	return (env);
 }
 
 void		opt_builtin(char **cmd, char ***env)
