@@ -6,7 +6,7 @@
 /*   By: bbarakov <bbarakov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/21 19:22:17 by bbarakov          #+#    #+#             */
-/*   Updated: 2015/01/23 14:23:58 by bbarakov         ###   ########.fr       */
+/*   Updated: 2015/01/24 16:09:20 by bbarakov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,14 +95,13 @@ void		unsetenv_builtin(char **cmd, char ***env)
 
 	i = 1;
 	if (cmd[i] == 0)
-	{		
+	{
 		write(2 ,"error unsetenv\n", 16);
 		return ;
 	}
 	while (cmd[i])
 	{
 		proceed_unset(cmd[i], env);
-		ft_putstr("here");
 		++i;
 	}
 }
