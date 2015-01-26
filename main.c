@@ -6,7 +6,7 @@
 /*   By: bbarakov <bbarakov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/20 15:50:48 by bbarakov          #+#    #+#             */
-/*   Updated: 2015/01/24 19:03:00 by bbarakov         ###   ########.fr       */
+/*   Updated: 2015/01/26 19:40:51 by bbarakov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ void		err_msg(char *err)
 		write(2, &err[i], 1);
 		++i;
 	}
-	// write(2, "\n", 1);
 }
 
 int			get_cmd(char *line, char ***cmd)
@@ -109,13 +108,14 @@ int			main(void)
 	env = 0;
 	cmd = 0;
 	env = set_my_env(environ, 0, 0, 0);
-	paths = get_paths(env);
+	paths = get_paths("PATH=", env);
 	while (1)
 	{
 		if (proceed(&env, &cmd, &my_path, paths) == 1)
 			continue;
 		if ((child = fork()) == 0)
 		{
+			printf("%s\n", my_path);
 			if (execve(my_path, cmd, env) == -1)
 				write(2, "error main\n", 12);
 		}

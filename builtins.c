@@ -73,7 +73,7 @@ void		opt_builtin(char **cmd, char ***env)
     if (!ft_strcmp(cmd[0], "cd"))
 		cd_builtin(cmd, env);
 	else if (!ft_strcmp(cmd[0], "exit"))
-		exit(0);
+		exit_builtin(cmd);
 	else if (!ft_strcmp(cmd[0], "env"))
 		env_builtin(*env);
 	else if (!ft_strcmp(cmd[0], "setenv"))

@@ -6,7 +6,7 @@
 /*   By: bbarakov <bbarakov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/20 15:50:48 by bbarakov          #+#    #+#             */
-/*   Updated: 2015/01/21 18:20:15 by bbarakov         ###   ########.fr       */
+/*   Updated: 2015/01/26 19:45:03 by bbarakov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,10 @@ char		*dir_content(char *path, char *name)
 			if (ft_strcmp(entry->d_name, name) == 0)
 			{
 				my_path = ft_strjoin(path, "/");
-				my_path = ft_strjoin(my_path, name);
+				my_path = ft_realloc(my_path, ft_strlen(name) + 1);
+				my_path = ft_strcat(my_path, name);
+				// my_path = ft_strjoin(path, "/");
+				// my_path = ft_strjoin(my_path, name);
 				closedir(dirp);
 				return (my_path);
 			}
@@ -51,16 +54,18 @@ char		*lookup_paths(char **tab_paths, char *name)
 	return (0);
 }
 
-char		**get_paths(char **env)
+char		**get_paths(char *var, char **env)
 {
 	int			i;
+	int			cmp;
 
 	i = 0;
+	cmp = ft_strlen(var);
 	while (env[i])
 	{
-		if (ft_strncmp(env[i], "PATH=", 5) == 0)
-			break ;
+		if (ft_strncmp(env[i], var, cmp) == 0)
+			return (ft_strsplit(&env[i][cmp], ':'));
 		++i;
 	}
-	return (ft_strsplit(&env[i][5], ':'));
+	return (0);
 }

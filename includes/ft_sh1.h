@@ -6,7 +6,7 @@
 /*   By: bbarakov <bbarakov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/20 15:51:32 by bbarakov          #+#    #+#             */
-/*   Updated: 2015/01/24 18:53:06 by bbarakov         ###   ########.fr       */
+/*   Updated: 2015/01/26 19:52:10 by bbarakov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,12 +25,13 @@
 # include <errno.h> // don't forget it
 
 char		*lookup_paths(char **tab_paths, char *name);
-char		**get_paths(char **env);
+char		**get_paths(char *var, char **env);
 void		opt_builtin(char **cmd, char ***environ);
 char		**set_my_env(char **environ, char *str, int cmp, int flag);
 void		setenv_builtin(char **cmd, char ***env);
 void		unsetenv_builtin(char **cmd, char ***env);
 void		env_builtin(char **env);
+void		exit_builtin(char **env);
 void		cd_builtin(char **cmd, char ***env);
 int			get_len(char **ptr, int flag);
 int			compare(char *cmd, char *env);
