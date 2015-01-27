@@ -6,23 +6,11 @@
 /*   By: bbarakov <bbarakov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/20 15:50:48 by bbarakov          #+#    #+#             */
-/*   Updated: 2015/01/26 19:40:51 by bbarakov         ###   ########.fr       */
+/*   Updated: 2015/01/27 17:11:07 by bbarakov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/ft_sh1.h"
-
-void		err_msg(char *err)
-{
-	int			i;
-
-	i = 0;
-	while (err[i])
-	{
-		write(2, &err[i], 1);
-		++i;
-	}
-}
 
 int			get_cmd(char *line, char ***cmd)
 {
@@ -115,7 +103,6 @@ int			main(void)
 			continue;
 		if ((child = fork()) == 0)
 		{
-			printf("%s\n", my_path);
 			if (execve(my_path, cmd, env) == -1)
 				write(2, "error main\n", 12);
 		}

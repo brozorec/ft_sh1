@@ -25,17 +25,6 @@ void		env_builtin(char **env)
 	}
 }
 
-void		exit_err(int i)
-{
-	if (i > 0)
-	{
-		err_msg("exit: Badly formed number.\n");
-		return ;
-	}
-	err_msg("exit: Expression Syntax.\n");
-	return ;
-}
-
 void		exit_builtin(char **cmd)
 {
 	int			status;

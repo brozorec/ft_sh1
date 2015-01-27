@@ -6,7 +6,7 @@
 /*   By: bbarakov <bbarakov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/20 15:51:32 by bbarakov          #+#    #+#             */
-/*   Updated: 2015/01/26 19:52:10 by bbarakov         ###   ########.fr       */
+/*   Updated: 2015/01/27 18:45:50 by bbarakov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,10 @@
 
 char		*lookup_paths(char **tab_paths, char *name);
 char		**get_paths(char *var, char **env);
+char		*dir_content(char *path, char *name);
 void		opt_builtin(char **cmd, char ***environ);
 char		**set_my_env(char **environ, char *str, int cmp, int flag);
+void		change_or_add_env_var(char *var, char *value, char ***env);
 void		setenv_builtin(char **cmd, char ***env);
 void		unsetenv_builtin(char **cmd, char ***env);
 void		env_builtin(char **env);
@@ -36,5 +38,8 @@ void		cd_builtin(char **cmd, char ***env);
 int			get_len(char **ptr, int flag);
 int			compare(char *cmd, char *env);
 void		err_msg(char *err);
+void		cd_errors(char *path, char *cwdbuf);
+void		cd_options_err(char a);
+void		exit_err(int i);
 
 #endif

@@ -68,6 +68,27 @@ char		**set_my_env(char **environ, char *str, int cmp, int flag)
 	return (env);
 }
 
+void			change_or_add_env_var(char *var, char *value, char ***env)
+{
+	int			i;
+	int			cmp;
+
+	i = 0;
+	cmp = ft_strlen(var);
+	while ((*env)[i])
+	{
+		if (ft_strncmp((*env)[i], var, cmp) == 0)
+		{
+			free((*env)[i]);
+			(*env)[i] = 0;
+			(*env)[i] = ft_strjoin(var, value);
+			return ;
+		}
+		++i;
+	}
+	*env = set_my_env(*env, ft_strjoin(var, value), 0, 1);
+}
+
 void		opt_builtin(char **cmd, char ***env)
 {
     if (!ft_strcmp(cmd[0], "cd"))
