@@ -6,7 +6,7 @@
 /*   By: bbarakov <bbarakov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/20 15:50:48 by bbarakov          #+#    #+#             */
-/*   Updated: 2015/01/27 17:11:07 by bbarakov         ###   ########.fr       */
+/*   Updated: 2015/01/28 15:09:02 by bbarakov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,27 @@
 
 int			get_cmd(char *line, char ***cmd)
 {
+	int				i;
+	char 			*new;
+
+	i = 1;
 	*cmd = ft_strsplit(line, ' ');
-	if (!ft_strcmp(**cmd, "cd") || !ft_strcmp(**cmd, "setenv") ||
-		!ft_strcmp(**cmd, "unsetenv") || !ft_strcmp(**cmd, "exit") ||
-		!ft_strcmp(**cmd, "env"))
+	while ((*cmd)[i])
+	{
+		if ((*cmd)[i][0] == '"')
+		{
+			new = ft_strtrim_quot_mark((*cmd)[i]);
+			free((*cmd)[i]);
+			(*cmd)[i] = 0;
+			(*cmd)[i] = ft_strdup(new);
+			if (new)
+				free(new);
+		}
+		++i;
+	}
+	if (!ft_strcmp((*cmd)[0], "cd") || !ft_strcmp((*cmd)[0], "setenv") ||
+		!ft_strcmp((*cmd)[0], "unsetenv") || !ft_strcmp((*cmd)[0], "exit") ||
+		!ft_strcmp((*cmd)[0], "env"))
 		return (1);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: bbarakov <bbarakov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/21 19:22:17 by bbarakov          #+#    #+#             */
-/*   Updated: 2015/01/24 16:09:20 by bbarakov         ###   ########.fr       */
+/*   Updated: 2015/01/28 15:22:31 by bbarakov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,11 +50,13 @@ void		proceed_set(char **cmd, char ***env)
 		}
 		else if (cmd[3] == 0)
 		{
-			var = ft_realloc(cmd[1], ft_strlen(cmd[2]) + 2);
-			var = ft_strcat(var, "=");
-			var = ft_strcat(var, cmd[2]);
+			var = ft_str3join(cmd[1], "=", cmd[2]);
+			// var = ft_realloc(cmd[1], ft_strlen(cmd[2]) + 2);
+			// var = ft_strcat(var, "=");
+			// var = ft_strcat(var, cmd[2]);
 		}
 		*env = set_my_env(*env, var, 0, 1);
+		// ft_strdel(&var);
 	}
 }
 
@@ -84,6 +86,7 @@ void		proceed_unset(char *cmd, char ***env)
 		if ((cmp = compare(cmd, (*env)[i])) != 0)
 		{
 			*env = set_my_env(*env, cmd, cmp, -1);
+			return ;
 		}
 		++i;
 	}

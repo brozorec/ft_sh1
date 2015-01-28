@@ -5,12 +5,41 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: bbarakov <bbarakov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2015/01/23 15:29:46 by bbarakov          #+#    #+#             */
-/*   Updated: 2015/01/27 19:18:38 by bbarakov         ###   ########.fr       */
+/*   Created: 2015/01/28 18:40:14 by bbarakov          #+#    #+#             */
+/*   Updated: 2015/01/28 20:05:56 by bbarakov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/ft_sh1.h"
+
+int 			get_options_or_take_oldpwd(char *cmd, t_cd **lst, char **env)
+{
+	int				i;
+
+	i = 1;
+	while (cmd[i])
+	{
+		if (cmd[i] != 'L' && cmd[i] != 'P')
+		{
+			cd_options_err(cmd[i]);
+			return (0);
+		}
+		else if (cmd[i] == 'L' && (*lst)->opt_p == 0)
+			(*lst)->opt_l = 1;
+		else if (cmd[i] == 'P' && (*lst)->opt_l == 0)
+			(*lst)->opt_p = 1;
+		++i;
+	}
+	if ((*lst)->opt_p == 0 && (*lst)->opt_l == 0)
+	{
+		if (((*lst)->path = take_home_or_oldpwd("OLDPWD=", 0, env)) == 0)
+		{
+			err_msg(": No such file or directory.\n");
+			return (0);
+		}
+	}
+	return (1);
+}
 
 char 			*second_try(char *name, char **env)
 {
@@ -40,153 +69,82 @@ char 			*second_try(char *name, char **env)
 	return (0);
 }
 
-char 			*take_home_or_oldpwd(char *var, char *addr, char **env)
-{
-	char 			*path;
-	int				cmp;
-	int				i;
-
-	i = 0;
-	cmp = ft_strlen(var);
-	while (env[i])
-	{
-		if (ft_strncmp(env[i], var, cmp) == 0)
-		{
-			if (addr)
-				path = ft_strjoin(&env[i][cmp], addr);
-			else
-				path = ft_strdup(&env[i][cmp]);
-			return (path);
-		}
-		++i;
-	}
-	return (0);
-}
-
-int				cd_options(char *cmd)
-{
-	int				i;
-	int				opt;
-
-	i = 1;
-	opt = 0;
-	while (cmd[i])
-	{
-		if (cmd[i] != 'L' && cmd[i] != 'P')
-		{
-			cd_options_err(cmd[i]);
-			return (-1);
-		}
-		else if (cmd[i] == 'L' && opt == 0)
-			opt = 1;
-		else if (cmd[i] == 'P' && opt == 0)
-			opt = 2;
-		++i;
-	}
-	return (opt);
-}
-
-char 			*ft_readlink(char *link_path)
-{
-	char 			*path;
-	// char 			buf[30];
-	// int				ret;
-	int				fd;
-	// int				i;
-
-	path = 0;
-	if ((fd = open(link_path, O_SYMLINK)) == -1)
-		return (0);
-	// ft_putnbr(fd);
-	// ft_putstr(link_path);
-	// if ((i = get_next_line(fd, &path)) == -1)
-	// {
-	// 	ft_putnbr(i);
-	// 	return (0);
-	// }
-	// free(link_path);
-	// ret = read(fd, buf, 50);
-	// buf[30] = '\0';
-	// printf("%d\n", errno);
-	// ft_putnbr(ret);
-	// ft_putstr(buf);
-	// ret = readlink(link_path, buf, 30);
-	// buf[ret] = '\0';
-	printf("%s\n", path);
-	close(fd);
-	return (path);
-
-}
-
-char 			*examine(int opt, char *cmd, char *cwd, char **env)
+char			*construct_and_examine_path(t_cd *lst, char **env)
 {
 	char 			*path;
 	struct stat 	buf;
 
 	path = 0;
-	if (opt == 0)
-	{
-		if ((path = take_home_or_oldpwd("OLDPWD=", 0, env)) == 0)
-		{
-			err_msg(": No such file or directory.\n");
-			return (0);
-		}
-		return (path);
-	}
-	if (cmd[0] == '~')
-		path = take_home_or_oldpwd("HOME=", &cmd[1], env);
-	else if (cmd[0] != '/')
-		path = ft_str3join(cwd, "/", cmd);
+	if (lst->name[0] == '~')
+		path = take_home_or_oldpwd("HOME=", &(lst->name[1]), env);
+	else if (lst->name[0] == '/')
+		path = ft_strdup(lst->name);
 	else
-		path = ft_strdup(cmd);
-	if (opt == 1)
+		path = ft_str3join(lst->old_dir, "/", lst->name);
+	if ((lst->opt_p == 0 && lst->opt_l == 0) || lst->opt_l == 1)
 	{
 		lstat(path, &buf);
 		if (S_ISLNK(buf.st_mode))
 		{
-			printf("%s\n", path);
+			chdir(path);
+			change_or_add_env_var("PWD=", path, &env);
+			change_or_add_env_var("OLDPWD=", lst->old_dir, &env);
+			free(path);
+			return (0);
 		}
 	}
 	return (path);
 }
 
-char			*set_path(char **cmd, char *cwd, char ***env)
+int 			cd_proceed(char **cmd, char ***env, t_cd **lst)
 {
-	int				opt;
-	char 			*path;
-
-	path = 0;
 	if (cmd[1] == 0)
-		path = take_home_or_oldpwd("HOME=", 0, *env);
+		(*lst)->path = take_home_or_oldpwd("HOME=", 0, *env);
 	else if (cmd[1][0] == '-')
 	{
-		opt = cd_options(cmd[1]);
-		path = examine(opt, cmd[2], cwd, *env);
+		if (get_options_or_take_oldpwd(cmd[1], lst, *env) == 0)
+			return (0);
+		(*lst)->name = ft_strdup(cmd[2]);
 	}
 	else
-		path = examine(1, cmd[1], cwd, *env);
-	return (path);
+		(*lst)->name = ft_strdup(cmd[1]);
+	if (((*lst)->path = construct_and_examine_path(*lst, *env)) == 0)
+		return (0);
+	return (1);
 }
 
 void			cd_builtin(char **cmd, char ***env)
 {
-	char 		*path;
-	char		old_dir[4096];
-	char		new_dir[4096];
+	t_cd		*lst;
 
-	getcwd(old_dir, 4096);
-	path = set_path(cmd, old_dir, env);
-	if (chdir(path) == -1)
+	lst = 0;
+	lst_init_or_free(lst);
+	getcwd(lst->old_dir, 4096);
+	if (cd_proceed(cmd, env, &lst) == 0)
+		return ;
+	if (chdir(lst->path) == -1)
 	{
-		if (chdir(second_try(cmd[1], *env)) == -1) // da
+		ft_strdel(&(lst->path));
+		lst->path = second_try(lst->name, *env);
+		if ((lst->path = construct_and_examine_path(lst, *env)) == 0)
+			return ;
+		if (chdir(lst->path) == -1)
 		{
-			cd_errors(path, old_dir);
-			free(path);
+			cd_errors(lst->name, lst->old_dir);
+			lst_init_or_free(lst);
 			return ;
 		}
 	}
-	getcwd(new_dir, 4096);
-	change_or_add_env_var("PWD=", new_dir, env);
-	change_or_add_env_var("OLDPWD=", old_dir, env);
-	free(path);
+	getcwd(lst->new_dir, 4096);
+	change_or_add_env_var("PWD=", lst->new_dir, env);
+	change_or_add_env_var("OLDPWD=", lst->old_dir, env);
+	lst_init_or_free(lst);
 }
+
+
+
+
+
+
+
+

@@ -71,6 +71,7 @@ char				*ft_strsub(char const *s, unsigned int start, size_t len);
 char				*ft_strjoin(char const *s1, char const *s2);
 char                *ft_str3join(char const *a, char const *b, char const *c);
 char				*ft_strtrim(char const *s);
+char                *ft_strtrim_quot_mark(char const *s);
 char				**ft_strsplit(char const *s, char c);
 char				*ft_itoa(int n);
 void				ft_putchar(char c);
