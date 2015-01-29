@@ -1,33 +1,61 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cd_builtin.c                                       :+:      :+:    :+:   */
+/*   cd_funcs.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bbarakov <bbarakov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/23 15:29:46 by bbarakov          #+#    #+#             */
-/*   Updated: 2015/01/28 19:58:38 by bbarakov         ###   ########.fr       */
+/*   Updated: 2015/01/29 16:47:46 by bbarakov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/ft_sh1.h"
 
-void			lst_init_or_free(t_cd *lst)
+void			lst_init_or_free(t_cd **lst)
 {
-	if (lst == 0)
+	if (*lst == 0)
 	{
-		lst = (t_cd *)malloc(sizeof(*lst));
-		lst->opt_l = 0;
-		lst->opt_p = 0;
-		lst->name = 0;
-		lst->path = 0;
+		*lst = (t_cd *)malloc(sizeof(t_cd));
+		(*lst)->opt_l = 0;
+		(*lst)->opt_p = 0;
+		(*lst)->name = 0;
+		(*lst)->path = 0;
 	}
 	else
 	{
-		free(lst->path);
-		free(lst->name);
-		free(lst);
+		free((*lst)->path);
+		free((*lst)->name);
+		free(*lst);
 	}
+}
+
+char 			*second_try(char *name, char **env)
+{
+	char 			**tab_paths;
+	char 			*path;
+	char 			*new_path;
+	char 			*truncated;
+	int				i;
+
+	if ((tab_paths = get_paths("CDPATH=", env)) == 0)
+		return (0);
+	if ((path = lookup_paths(tab_paths, name)) != 0)
+	{
+		ft_strdel(tab_paths);
+		return (path);
+	}
+	truncated = ft_strdup(ft_strchr(name, '/'));
+	i = ft_strlen(name) - ft_strlen(truncated);
+	ft_bzero(&name[i], ft_strlen(truncated));
+	if ((path = lookup_paths(tab_paths, name)) != 0)
+	{
+		new_path = ft_strjoin(path, truncated);
+		free(truncated);
+		ft_strdel(tab_paths);
+		return (new_path);
+	}
+	return (0);
 }
 
 void			change_or_add_env_var(char *var, char *value, char ***env)

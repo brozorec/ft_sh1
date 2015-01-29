@@ -6,7 +6,7 @@
 /*   By: bbarakov <bbarakov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/20 15:51:32 by bbarakov          #+#    #+#             */
-/*   Updated: 2015/01/28 20:01:13 by bbarakov         ###   ########.fr       */
+/*   Updated: 2015/01/29 16:52:04 by bbarakov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,9 +44,10 @@ void		unsetenv_builtin(char **cmd, char ***env);
 void		env_builtin(char **env);
 void		exit_builtin(char **env);
 void		cd_builtin(char **cmd, char ***env);
-void		lst_init_or_free(t_cd *lst);
+void		lst_init_or_free(t_cd **lst);
 void		change_or_add_env_var(char *var, char *value, char ***env);
 char 		*take_home_or_oldpwd(char *var, char *addr, char **env);
+char 		*second_try(char *name, char **env);
 int			get_len(char **ptr, int flag);
 int			compare(char *cmd, char *env);
 void		err_msg(char *err);
