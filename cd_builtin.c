@@ -6,39 +6,11 @@
 /*   By: bbarakov <bbarakov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/28 18:40:14 by bbarakov          #+#    #+#             */
-/*   Updated: 2015/01/29 16:52:44 by bbarakov         ###   ########.fr       */
+/*   Updated: 2015/01/31 16:42:30 by bbarakov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/ft_sh1.h"
-
-int
-	get_options_or_take_oldpwd(char *cmd, t_cd **lst, char **env, int i)
-{
-	while (cmd[i])
-	{
-		if (cmd[i] != 'L' && cmd[i] != 'P')
-		{
-			cd_options_err(cmd[i]);
-			return (0);
-		}
-		else if (cmd[i] == 'L' && (*lst)->opt_p == 0)
-			(*lst)->opt_l = 1;
-		else if (cmd[i] == 'P' && (*lst)->opt_l == 0)
-			(*lst)->opt_p = 1;
-		++i;
-	}
-	if ((*lst)->opt_p == 0 && (*lst)->opt_l == 0)
-	{
-		if (((*lst)->path = take_home_or_oldpwd("OLDPWD=", 0, env)) == 0)
-		{
-			err_msg(": No such file or directory.\n");
-			return (0);
-		}
-		return (2);
-	}
-	return (1);
-}
 
 int
 	examine_path(t_cd *lst, char **env)
@@ -52,8 +24,7 @@ int
 		{
 			if (chdir(lst->path) == -1)
 			{
-				cd_errors(lst->name, lst->old_dir);
-				lst_init_or_free(&lst);
+				cd_errors(&lst);
 				return (0);
 			}
 			change_or_add_env_var("PWD=", lst->path, &env);
@@ -98,9 +69,26 @@ int
 	}
 	else
 		(*lst)->name = ft_strdup(cmd[1]);
+	(*lst)->input = ft_strdup((*lst)->name);
 	(*lst)->path = construct_path(*lst, *env);
+	(*lst)->saved_path = ft_strdup((*lst)->path);
 	if ((examine_path(*lst, *env)) == 0)
 		return (0);
+	return (1);
+}
+
+int
+	failure_first_try(t_cd **lst, char **env)
+{
+	free((*lst)->path);
+	(*lst)->path = second_try((*lst)->name, env);
+	if (examine_path(*lst, env) == 0)
+		return (0);
+	if (chdir((*lst)->path) == -1)
+	{
+		cd_errors(lst);
+		return (0);
+	}
 	return (1);
 }
 
@@ -116,16 +104,8 @@ void
 		return ;
 	if (chdir(lst->path) == -1)
 	{
-		ft_strdel(&(lst->path));
-		lst->path = second_try(lst->name, *env);
-		if (examine_path(lst, *env) == 0)
+		if (failure_first_try(&lst, *env) == 0)
 			return ;
-		if (chdir(lst->path) == -1)
-		{
-			cd_errors(lst->name, lst->old_dir);
-			lst_init_or_free(&lst);
-			return ;
-		}
 	}
 	getcwd(lst->new_dir, 4096);
 	change_or_add_env_var("PWD=", lst->new_dir, env);

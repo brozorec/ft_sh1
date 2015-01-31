@@ -6,7 +6,7 @@
 /*   By: bbarakov <bbarakov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/27 11:00:30 by bbarakov          #+#    #+#             */
-/*   Updated: 2015/01/27 13:25:24 by bbarakov         ###   ########.fr       */
+/*   Updated: 2015/01/31 17:00:47 by bbarakov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void		err_msg(char *err)
 	int			i;
 
 	i = 0;
-	while (err[i])
+	while (err && err[i])
 	{
 		write(2, &err[i], 1);
 		++i;
@@ -42,35 +42,29 @@ void		cd_options_err(char a)
 	err_msg(": invalid option\ncd: usage: cd [-L|-P] [dir]\n");
 }
 
-void		cd_errors(char *path, char *cwdbuf)
+void		cd_errors(t_cd **lst)
 {
 	struct stat		buf;
-	char			*new_path;
 
-	if (path[0] != '/')
-	{
-		new_path = ft_strjoin(cwdbuf, "/");
-		new_path = ft_strjoin(new_path, path);
-	}
-	else
-		new_path = ft_strdup(path);
-	if (stat(new_path, &buf) == -1)
+	if (stat((*lst)->saved_path, &buf) == -1 && stat((*lst)->path, &buf) == -1)
 	{
 		err_msg("cd: no such file or directory: ");
-		err_msg(path);
+		err_msg((*lst)->input);
 		err_msg("\n");
+		lst_init_or_free(lst);
 		return ;
 	}
 	if (S_ISDIR(buf.st_mode))
 	{
 		err_msg("cd: permission denied: ");
-		err_msg(path);
+		err_msg((*lst)->input);
 		err_msg("\n");
 	}
 	else
 	{
 		err_msg("cd: not a directory: ");
-		err_msg(path);
+		err_msg((*lst)->input);
 		err_msg("\n");
 	}
+	lst_init_or_free(lst);
 }

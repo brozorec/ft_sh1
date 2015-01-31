@@ -6,13 +6,14 @@
 /*   By: bbarakov <bbarakov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/23 15:29:46 by bbarakov          #+#    #+#             */
-/*   Updated: 2015/01/29 16:47:46 by bbarakov         ###   ########.fr       */
+/*   Updated: 2015/01/31 17:31:32 by bbarakov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/ft_sh1.h"
 
-void			lst_init_or_free(t_cd **lst)
+void
+	lst_init_or_free(t_cd **lst)
 {
 	if (*lst == 0)
 	{
@@ -21,16 +22,21 @@ void			lst_init_or_free(t_cd **lst)
 		(*lst)->opt_p = 0;
 		(*lst)->name = 0;
 		(*lst)->path = 0;
+		(*lst)->input = 0;
+		(*lst)->saved_path = 0;
 	}
 	else
 	{
 		free((*lst)->path);
 		free((*lst)->name);
+		free((*lst)->input);
+		free((*lst)->saved_path);
 		free(*lst);
 	}
 }
 
-char 			*second_try(char *name, char **env)
+char
+	*second_try(char *name, char **env)
 {
 	char 			**tab_paths;
 	char 			*path;
@@ -58,10 +64,40 @@ char 			*second_try(char *name, char **env)
 	return (0);
 }
 
-void			change_or_add_env_var(char *var, char *value, char ***env)
+int
+	get_options_or_take_oldpwd(char *cmd, t_cd **lst, char **env, int i)
+{
+	while (cmd[i])
+	{
+		if (cmd[i] != 'L' && cmd[i] != 'P')
+		{
+			cd_options_err(cmd[i]);
+			return (0);
+		}
+		else if (cmd[i] == 'L' && (*lst)->opt_p == 0)
+			(*lst)->opt_l = 1;
+		else if (cmd[i] == 'P' && (*lst)->opt_l == 0)
+			(*lst)->opt_p = 1;
+		++i;
+	}
+	if ((*lst)->opt_p == 0 && (*lst)->opt_l == 0)
+	{
+		if (((*lst)->path = take_home_or_oldpwd("OLDPWD=", 0, env)) == 0)
+		{
+			err_msg(": No such file or directory.\n");
+			return (0);
+		}
+		return (2);
+	}
+	return (1);
+}
+
+void
+	change_or_add_env_var(char *var, char *value, char ***env)
 {
 	int			i;
 	int			cmp;
+	char 		**copy;
 
 	i = 0;
 	cmp = ft_strlen(var);
@@ -76,10 +112,13 @@ void			change_or_add_env_var(char *var, char *value, char ***env)
 		}
 		++i;
 	}
-	*env = set_my_env(*env, ft_strjoin(var, value), 0, 1);
+	copy = *env;
+	ft_strdel(*env);
+	*env = set_my_env(copy, ft_strjoin(var, value), 0, 1);
 }
 
-char 			*take_home_or_oldpwd(char *var, char *addr, char **env)
+char
+	*take_home_or_oldpwd(char *var, char *addr, char **env)
 {
 	char 			*path;
 	int				cmp;

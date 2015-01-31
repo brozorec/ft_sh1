@@ -6,7 +6,7 @@
 /*   By: bbarakov <bbarakov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/20 15:50:48 by bbarakov          #+#    #+#             */
-/*   Updated: 2015/01/28 15:09:02 by bbarakov         ###   ########.fr       */
+/*   Updated: 2015/01/31 19:35:34 by bbarakov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,23 +42,9 @@ int			get_cmd(char *line, char ***cmd)
 void		sig_handler(int sig)
 {
 	if (sig <= 31)
+	{
 		return ;
-	// if (sig == SIGQUIT)
-	// {
-	// 	ft_putstr("caught SIGQUIT");
-	// 	return ;
-	// }
-	// if (sig == SIGHUP)
-	// {
-	// 	ft_putstr("caught SIGHUP");
-	// 	kill(0, SIGQUIT);
-	// 	return ;
-	// }
-	// if (sig == SIGINT)
-	// {
-	// 	ft_putstr("caught SIGINT");
-	// 	return ;
-	// }
+	}
 }
 
 void		signals(void)
@@ -80,20 +66,20 @@ int			proceed(char ***env, char ***cmd, char **my_path, char **paths)
 	ft_putstr("@>");
 	if (get_next_line(0, &line) == 0)
 	{
-		ft_putstr("\n");
-		return(1);
+		ft_putstr("exit\n");
+		exit(0);
 	}
 	if (ft_strlen(line) == 0)
-		return(1);
+		return (1);
 	if (get_cmd(line, cmd) == 1)
 	{
 		opt_builtin(*cmd, env);
-		return(1);
+		return (1);
 	}
 	if ((*my_path = lookup_paths(paths, (*cmd)[0])) == 0)
 	{
-		*my_path = ft_strdup((*cmd)[0]);
-		return(0);
+		err_msg("command not found\n");
+		return (1);
 	}
 	return (0);
 }
@@ -109,7 +95,7 @@ int			main(void)
 	int			status;
 
 	signals();
-	signal(SIGINT, SIG_DFL);
+	// signal(SIGINT, SIG_DFL);
 	env = 0;
 	cmd = 0;
 	env = set_my_env(environ, 0, 0, 0);

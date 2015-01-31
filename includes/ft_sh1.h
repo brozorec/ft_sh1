@@ -6,7 +6,7 @@
 /*   By: bbarakov <bbarakov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/20 15:51:32 by bbarakov          #+#    #+#             */
-/*   Updated: 2015/01/29 16:52:04 by bbarakov         ###   ########.fr       */
+/*   Updated: 2015/01/31 15:31:18 by bbarakov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@ typedef struct 			s_cd
 	int					opt_p;
 	char 				*name;
 	char 				*path;
+	char 				*input;
+	char 				*saved_path;
 	char 				new_dir[4096];
 	char 				old_dir[4096];
 }						t_cd;
@@ -47,11 +49,12 @@ void		cd_builtin(char **cmd, char ***env);
 void		lst_init_or_free(t_cd **lst);
 void		change_or_add_env_var(char *var, char *value, char ***env);
 char 		*take_home_or_oldpwd(char *var, char *addr, char **env);
+int 		get_options_or_take_oldpwd(char *cmd, t_cd **lst, char **env, int i);
 char 		*second_try(char *name, char **env);
 int			get_len(char **ptr, int flag);
 int			compare(char *cmd, char *env);
 void		err_msg(char *err);
-void		cd_errors(char *path, char *cwdbuf);
+void		cd_errors(t_cd **lst);
 void		cd_options_err(char a);
 void		exit_err(int i);
 
