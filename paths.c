@@ -6,7 +6,7 @@
 /*   By: bbarakov <bbarakov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/20 15:50:48 by bbarakov          #+#    #+#             */
-/*   Updated: 2015/01/31 19:42:52 by bbarakov         ###   ########.fr       */
+/*   Updated: 2015/02/02 15:59:05 by bbarakov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,21 +35,6 @@ char		*dir_content(char *path, char *name)
 	return (0);
 }
 
-char		*lookup_paths(char **tab_paths, char *name)
-{
-	int			i;
-	char		*my_path;
-
-	i = 0;
-	while (tab_paths && tab_paths[i])
-	{
-		if ((my_path = dir_content(tab_paths[i], name)) != 0)
-			return (my_path);
-		i++;
-	}
-	return (0);
-}
-
 char		**get_paths(char *var, char **env)
 {
 	int			i;
@@ -63,5 +48,27 @@ char		**get_paths(char *var, char **env)
 			return (ft_strsplit(&env[i][cmp], ':'));
 		++i;
 	}
+	return (0);
+}
+
+char		*lookup_paths(char *var, char *name, char **env)
+{
+	int			i;
+	char 		**tab_paths;
+	char		*my_path;
+
+	i = 0;
+	tab_paths = get_paths(var, env);
+	while (tab_paths && tab_paths[i])
+	{
+		if ((my_path = dir_content(tab_paths[i], name)) != 0)
+		{
+			ft_strdel(tab_paths);
+			return (my_path);
+		}
+		i++;
+	}
+	if (tab_paths)
+		ft_strdel(tab_paths);
 	return (0);
 }

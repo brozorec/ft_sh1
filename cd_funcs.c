@@ -6,7 +6,7 @@
 /*   By: bbarakov <bbarakov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/23 15:29:46 by bbarakov          #+#    #+#             */
-/*   Updated: 2015/01/31 17:31:32 by bbarakov         ###   ########.fr       */
+/*   Updated: 2015/02/02 15:40:12 by bbarakov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,27 +38,22 @@ void
 char
 	*second_try(char *name, char **env)
 {
-	char 			**tab_paths;
 	char 			*path;
 	char 			*new_path;
 	char 			*truncated;
 	int				i;
 
-	if ((tab_paths = get_paths("CDPATH=", env)) == 0)
-		return (0);
-	if ((path = lookup_paths(tab_paths, name)) != 0)
+	if ((path = lookup_paths("CDPATH=", name, env)) != 0)
 	{
-		ft_strdel(tab_paths);
 		return (path);
 	}
 	truncated = ft_strdup(ft_strchr(name, '/'));
 	i = ft_strlen(name) - ft_strlen(truncated);
 	ft_bzero(&name[i], ft_strlen(truncated));
-	if ((path = lookup_paths(tab_paths, name)) != 0)
+	if ((path = lookup_paths("CDPATH=", name, env)) != 0)
 	{
 		new_path = ft_strjoin(path, truncated);
 		free(truncated);
-		ft_strdel(tab_paths);
 		return (new_path);
 	}
 	return (0);
@@ -82,7 +77,7 @@ int
 	}
 	if ((*lst)->opt_p == 0 && (*lst)->opt_l == 0)
 	{
-		if (((*lst)->path = take_home_or_oldpwd("OLDPWD=", 0, env)) == 0)
+		if (((*lst)->path = take_env_var("OLDPWD=", 0, env)) == 0)
 		{
 			err_msg(": No such file or directory.\n");
 			return (0);
@@ -97,7 +92,7 @@ void
 {
 	int			i;
 	int			cmp;
-	char 		**copy;
+	// char 		**copy;
 
 	i = 0;
 	cmp = ft_strlen(var);
@@ -112,13 +107,13 @@ void
 		}
 		++i;
 	}
-	copy = *env;
-	ft_strdel(*env);
-	*env = set_my_env(copy, ft_strjoin(var, value), 0, 1);
+	// copy = *env;
+	// ft_strdel(*env);
+	*env = set_my_env(*env, ft_strjoin(var, value), 0, 1);
 }
 
 char
-	*take_home_or_oldpwd(char *var, char *addr, char **env)
+	*take_env_var(char *var, char *addr, char **env)
 {
 	char 			*path;
 	int				cmp;

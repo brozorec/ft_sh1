@@ -6,7 +6,7 @@
 /*   By: bbarakov <bbarakov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/20 15:51:32 by bbarakov          #+#    #+#             */
-/*   Updated: 2015/01/31 15:31:18 by bbarakov         ###   ########.fr       */
+/*   Updated: 2015/02/02 15:29:35 by bbarakov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ typedef struct 			s_cd
 	char 				old_dir[4096];
 }						t_cd;
 
-char		*lookup_paths(char **tab_paths, char *name);
+char		*lookup_paths(char *var, char *name, char **env);
 char		**get_paths(char *var, char **env);
 char		*dir_content(char *path, char *name);
 void		opt_builtin(char **cmd, char ***environ);
@@ -46,9 +46,10 @@ void		unsetenv_builtin(char **cmd, char ***env);
 void		env_builtin(char **env);
 void		exit_builtin(char **env);
 void		cd_builtin(char **cmd, char ***env);
+void		pwd_builtin(char **env);
 void		lst_init_or_free(t_cd **lst);
 void		change_or_add_env_var(char *var, char *value, char ***env);
-char 		*take_home_or_oldpwd(char *var, char *addr, char **env);
+char 		*take_env_var(char *var, char *addr, char **env);
 int 		get_options_or_take_oldpwd(char *cmd, t_cd **lst, char **env, int i);
 char 		*second_try(char *name, char **env);
 int			get_len(char **ptr, int flag);

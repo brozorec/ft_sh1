@@ -6,7 +6,7 @@
 /*   By: bbarakov <bbarakov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/20 15:50:48 by bbarakov          #+#    #+#             */
-/*   Updated: 2015/01/31 19:35:34 by bbarakov         ###   ########.fr       */
+/*   Updated: 2015/02/02 19:04:16 by bbarakov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int			get_cmd(char *line, char ***cmd)
 	}
 	if (!ft_strcmp((*cmd)[0], "cd") || !ft_strcmp((*cmd)[0], "setenv") ||
 		!ft_strcmp((*cmd)[0], "unsetenv") || !ft_strcmp((*cmd)[0], "exit") ||
-		!ft_strcmp((*cmd)[0], "env"))
+		!ft_strcmp((*cmd)[0], "env") || !ft_strcmp((*cmd)[0], "pwd"))
 		return (1);
 	return (0);
 }
@@ -59,7 +59,7 @@ void		signals(void)
 	}
 }
 
-int			proceed(char ***env, char ***cmd, char **my_path, char **paths)
+int			proceed(char ***env, char ***cmd, char **my_path)
 {
 	char		*line;
 
@@ -76,7 +76,9 @@ int			proceed(char ***env, char ***cmd, char **my_path, char **paths)
 		opt_builtin(*cmd, env);
 		return (1);
 	}
-	if ((*my_path = lookup_paths(paths, (*cmd)[0])) == 0)
+	if ((*cmd)[0][0] == '/' || (*cmd)[0][0] == '.')
+		*my_path = ft_strdup((*cmd)[0]);
+	else if ((*my_path = lookup_paths("PATH=", (*cmd)[0], *env)) == 0)
 	{
 		err_msg("command not found\n");
 		return (1);
@@ -89,27 +91,28 @@ int			main(void)
 	extern char **environ;
 	char		**env;
 	char		**cmd;
-	char		**paths;
 	char		*my_path;
 	pid_t		child;
-	int			status;
+	// int			status;
 
 	signals();
-	// signal(SIGINT, SIG_DFL);
 	env = 0;
 	cmd = 0;
 	env = set_my_env(environ, 0, 0, 0);
-	paths = get_paths("PATH=", env);
 	while (1)
 	{
-		if (proceed(&env, &cmd, &my_path, paths) == 1)
+		if (proceed(&env, &cmd, &my_path) == 1)
 			continue;
 		if ((child = fork()) == 0)
 		{
 			if (execve(my_path, cmd, env) == -1)
+			{
 				write(2, "error main\n", 12);
+				exit(127);
+			}
 		}
-		waitpid(child, &status, WUNTRACED);
+		wait(0);
+		// waitpid(child, &status, WUNTRACED);
 		// if (WIFSIGNALED(status))
 		// 	sig_handler(WTERMSIG(status));
 	}

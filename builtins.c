@@ -6,7 +6,7 @@
 /*   By: bbarakov <bbarakov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/21 19:22:17 by bbarakov          #+#    #+#             */
-/*   Updated: 2015/01/24 16:02:34 by bbarakov         ###   ########.fr       */
+/*   Updated: 2015/02/02 16:23:47 by bbarakov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,8 @@ char		**set_my_env(char **environ, char *str, int cmp, int flag)
 		free(str);
 	}
 	env[len] = 0;
+	if (flag != 0)
+		ft_strdel(environ);
 	return (env);
 }
 
@@ -80,4 +82,6 @@ void		opt_builtin(char **cmd, char ***env)
 		setenv_builtin(cmd, env);
 	else if (!ft_strcmp(cmd[0], "unsetenv"))
 		unsetenv_builtin(cmd, env);
+	else if (!ft_strcmp(cmd[0], "pwd"))
+		pwd_builtin(*env);
 }
