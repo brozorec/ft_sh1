@@ -6,7 +6,7 @@
 /*   By: bbarakov <bbarakov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/23 15:29:46 by bbarakov          #+#    #+#             */
-/*   Updated: 2015/02/02 15:40:12 by bbarakov         ###   ########.fr       */
+/*   Updated: 2015/02/03 19:46:01 by bbarakov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,11 +92,10 @@ void
 {
 	int			i;
 	int			cmp;
-	// char 		**copy;
 
 	i = 0;
 	cmp = ft_strlen(var);
-	while ((*env)[i])
+	while (*env && (*env)[i])
 	{
 		if (ft_strncmp((*env)[i], var, cmp) == 0)
 		{
@@ -107,8 +106,6 @@ void
 		}
 		++i;
 	}
-	// copy = *env;
-	// ft_strdel(*env);
 	*env = set_my_env(*env, ft_strjoin(var, value), 0, 1);
 }
 

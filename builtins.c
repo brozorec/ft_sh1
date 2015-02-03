@@ -6,7 +6,7 @@
 /*   By: bbarakov <bbarakov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/21 19:22:17 by bbarakov          #+#    #+#             */
-/*   Updated: 2015/02/02 16:23:47 by bbarakov         ###   ########.fr       */
+/*   Updated: 2015/02/03 19:57:56 by bbarakov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int			compare(char *cmd, char *env)
     int			i;
 
 	i = 0;
-	while (env[i] && env[i] != '=')
+	while (env && env[i] && env[i] != '=')
 		++i;
 	if (ft_strncmp(env, cmd, i) == 0)
 		return (i);
@@ -29,7 +29,7 @@ int			get_len(char **ptr, int flag)
 	int		i;
 
 	i = 0;
-	while (ptr[i])
+	while (ptr && ptr[i])
 		++i;
 	if (flag == 1)
 		return (i + 1);
@@ -64,7 +64,7 @@ char		**set_my_env(char **environ, char *str, int cmp, int flag)
 		env[j] = ft_strdup(str);
 		free(str);
 	}
-	env[len] = 0;
+	env[len] = 0; //test???
 	if (flag != 0)
 		ft_strdel(environ);
 	return (env);
@@ -77,7 +77,7 @@ void		opt_builtin(char **cmd, char ***env)
 	else if (!ft_strcmp(cmd[0], "exit"))
 		exit_builtin(cmd);
 	else if (!ft_strcmp(cmd[0], "env"))
-		env_builtin(*env);
+		env_builtin(cmd, *env);
 	else if (!ft_strcmp(cmd[0], "setenv"))
 		setenv_builtin(cmd, env);
 	else if (!ft_strcmp(cmd[0], "unsetenv"))

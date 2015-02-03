@@ -6,7 +6,7 @@
 /*   By: bbarakov <bbarakov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/20 15:51:32 by bbarakov          #+#    #+#             */
-/*   Updated: 2015/02/02 15:29:35 by bbarakov         ###   ########.fr       */
+/*   Updated: 2015/02/03 19:22:58 by bbarakov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,14 @@ typedef struct 			s_cd
 	char 				old_dir[4096];
 }						t_cd;
 
+typedef struct 			s_env
+{
+	int 				opt_i;
+	char 				**new_env;
+	char 				**new_cmd;
+	char 				*prog_name;
+}						t_env;
+
 char		*lookup_paths(char *var, char *name, char **env);
 char		**get_paths(char *var, char **env);
 char		*dir_content(char *path, char *name);
@@ -43,7 +51,8 @@ void		opt_builtin(char **cmd, char ***environ);
 char		**set_my_env(char **environ, char *str, int cmp, int flag);
 void		setenv_builtin(char **cmd, char ***env);
 void		unsetenv_builtin(char **cmd, char ***env);
-void		env_builtin(char **env);
+void		env_builtin(char **cmd, char **env);
+void		print_env(char **env);
 void		exit_builtin(char **env);
 void		cd_builtin(char **cmd, char ***env);
 void		pwd_builtin(char **env);

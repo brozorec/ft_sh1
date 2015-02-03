@@ -6,7 +6,7 @@
 /*   By: bbarakov <bbarakov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/21 19:22:17 by bbarakov          #+#    #+#             */
-/*   Updated: 2015/01/28 15:22:31 by bbarakov         ###   ########.fr       */
+/*   Updated: 2015/02/03 16:53:32 by bbarakov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ void		setenv_builtin(char **cmd, char ***env)
 {
 	if (cmd[1] == 0)
 	{
-		env_builtin(*env);
+		print_env(*env);
 		return ;
 	}
 	if (get_len(cmd, 0) > 3)

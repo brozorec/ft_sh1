@@ -6,7 +6,7 @@
 #    By: bbarakov <bbarakov@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2014/11/10 12:34:26 by bbarakov          #+#    #+#              #
-#    Updated: 2014/12/16 15:28:58 by bbarakov         ###   ########.fr        #
+#    Updated: 2015/02/03 18:54:25 by bbarakov         ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -27,7 +27,7 @@ ft_strsplit.c ft_putchar.c ft_putstr.c ft_putendl.c ft_putnbr.c \
 ft_putchar_fd.c ft_putstr_fd.c ft_putnbr_fd.c ft_lstnew.c ft_lstdelone.c \
 ft_lstdel.c ft_lstadd.c ft_lstpush.c ft_lstiter.c ft_lstmap.c ft_realloc.c \
 ft_listnew.c ft_strcmp_rev.c ft_numcmp.c ft_numcmp_rev.c ft_getsize_nbr.c \
-ft_str3join.c ft_strtrim_quot_mark.c
+ft_str3join.c ft_strtrim_quot_mark.c ft_strchr_rev.c
 
 OBJ = $(SRC:.c=.o)
 
