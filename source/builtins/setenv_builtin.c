@@ -1,23 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   set_unset_builtins.c                               :+:      :+:    :+:   */
+/*   setenv_builtin.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bbarakov <bbarakov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2015/01/21 19:22:17 by bbarakov          #+#    #+#             */
-/*   Updated: 2015/02/03 16:53:32 by bbarakov         ###   ########.fr       */
+/*   Created: 2015/02/04 15:29:07 by bbarakov          #+#    #+#             */
+/*   Updated: 2015/02/04 15:29:49 by bbarakov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "includes/ft_sh1.h"
+#include "ft_sh1.h"
+#include "ft_sh1_prototypes.h"
 
 int			already_set(char **cmd, char ***env)
 {
 	int			i;
 
 	i = 0;
-	while ((*env)[i])
+	while (*env && (*env)[i])
 	{
 		if (compare(cmd[1], (*env)[i]) > 0 && cmd[2] == 0)
 		{
@@ -41,10 +42,16 @@ void		proceed_set(char **cmd, char ***env)
 {
 	char		*var;
 
+	var = 0;
 	if (already_set(cmd, env) == 0)
 	{
 		if (cmd[2] == 0)
 		{
+			if (ft_strchr(cmd[2], '='))
+			{
+				err_msg("setenv: Syntax Error.\n");
+				return ;
+			}
 			var = ft_realloc(cmd[1], 2);
 			var = ft_strcat(var, "=");
 		}
@@ -53,7 +60,6 @@ void		proceed_set(char **cmd, char ***env)
 			var = ft_str3join(cmd[1], "=", cmd[2]);
 		}
 		*env = set_my_env(*env, var, 0, 1);
-		// ft_strdel(&var);
 	}
 }
 
@@ -66,42 +72,8 @@ void		setenv_builtin(char **cmd, char ***env)
 	}
 	if (get_len(cmd, 0) > 3)
 	{
-		write(2 ,"error setenv\n", 14);
+		err_msg("setenv: Too many arguments.\n");
 		return ;
 	}
 	proceed_set(cmd, env);
-}
-
-void		proceed_unset(char *cmd, char ***env)
-{
-	int			i;
-	int			cmp;
-
-	i = 0;
-	while ((*env)[i])
-	{
-		if ((cmp = compare(cmd, (*env)[i])) != 0)
-		{
-			*env = set_my_env(*env, cmd, cmp, -1);
-			return ;
-		}
-		++i;
-	}
-}
-
-void		unsetenv_builtin(char **cmd, char ***env)
-{
-	int			i;
-
-	i = 1;
-	if (cmd[i] == 0)
-	{
-		write(2 ,"error unsetenv\n", 16);
-		return ;
-	}
-	while (cmd[i])
-	{
-		proceed_unset(cmd[i], env);
-		++i;
-	}
 }

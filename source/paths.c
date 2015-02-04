@@ -6,11 +6,12 @@
 /*   By: bbarakov <bbarakov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/20 15:50:48 by bbarakov          #+#    #+#             */
-/*   Updated: 2015/02/02 15:59:05 by bbarakov         ###   ########.fr       */
+/*   Updated: 2015/02/04 19:05:57 by bbarakov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "includes/ft_sh1.h"
+#include "ft_sh1.h"
+#include "ft_sh1_prototypes.h"
 
 char		*dir_content(char *path, char *name)
 {
@@ -42,7 +43,7 @@ char		**get_paths(char *var, char **env)
 
 	i = 0;
 	cmp = ft_strlen(var);
-	while (env[i])
+	while (env && env[i])
 	{
 		if (ft_strncmp(env[i], var, cmp) == 0)
 			return (ft_strsplit(&env[i][cmp], ':'));
@@ -54,7 +55,7 @@ char		**get_paths(char *var, char **env)
 char		*lookup_paths(char *var, char *name, char **env)
 {
 	int			i;
-	char 		**tab_paths;
+	char		**tab_paths;
 	char		*my_path;
 
 	i = 0;

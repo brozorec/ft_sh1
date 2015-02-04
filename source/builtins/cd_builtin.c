@@ -10,12 +10,13 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "includes/ft_sh1.h"
+#include "ft_sh1.h"
+#include "ft_sh1_prototypes.h"
 
 int
 	examine_path(t_cd *lst, char **env)
 {
-	struct stat 	buf;
+	struct stat		buf;
 
 	if ((lst->opt_p == 0 && lst->opt_l == 0) || lst->opt_l == 1)
 	{
@@ -39,7 +40,7 @@ int
 char
 	*construct_path(t_cd *lst, char **env)
 {
-	char 			*path;
+	char			*path;
 
 	path = 0;
 	if (lst->name && lst->name[0] == '~')
@@ -54,7 +55,7 @@ char
 int
 	cd_proceed(char **cmd, char ***env, t_cd **lst)
 {
-	int 		i;
+	int				i;
 
 	if (cmd[1] == 0)
 		(*lst)->path = take_env_var("HOME=", 0, *env);
@@ -112,11 +113,3 @@ void
 	change_or_add_env_var("OLDPWD=", lst->old_dir, env);
 	lst_init_or_free(&lst);
 }
-
-
-
-
-
-
-
-

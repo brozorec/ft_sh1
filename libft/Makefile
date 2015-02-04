@@ -6,7 +6,7 @@
 #    By: bbarakov <bbarakov@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2014/11/10 12:34:26 by bbarakov          #+#    #+#              #
-#    Updated: 2015/02/03 18:54:25 by bbarakov         ###   ########.fr        #
+#    Updated: 2015/02/04 18:11:13 by bbarakov         ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -33,9 +33,11 @@ OBJ = $(SRC:.c=.o)
 
 all: $(NAME)
 
-$(NAME):
-	@$(CC) $(GFLAGS) -c $(SRC) -I includes
-	@ar rc $(NAME) $(OBJ)
+$(NAME): $(OBJ)
+	@ar rc $@ $^
+
+%.o: %.c
+	@$(CC) $(GFLAGS) -c $^ -I includes
 
 clean:
 	@rm -f $(OBJ)

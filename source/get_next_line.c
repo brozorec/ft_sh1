@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./includes/get_next_line.h"
+#include "get_next_line.h"
 
 t_struct
 	*create_new_struct(int fd)

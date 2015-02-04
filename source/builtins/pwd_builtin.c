@@ -11,11 +11,12 @@
 /* ************************************************************************** */
 
 #include "ft_sh1.h"
+#include "ft_sh1_prototypes.h"
 
 void		pwd_builtin(char **env)
 {
-	char 		cwd[4096];
-	char 		*path;
+	char		cwd[4096];
+	char		*path;
 
 	if ((path = take_env_var("PWD=", 0, env)) != 0)
 	{

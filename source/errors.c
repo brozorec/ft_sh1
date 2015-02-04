@@ -10,7 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "includes/ft_sh1.h"
+#include "ft_sh1.h"
+#include "ft_sh1_prototypes.h"
 
 void		err_msg(char *err)
 {
@@ -48,23 +49,20 @@ void		cd_errors(t_cd **lst)
 
 	if (stat((*lst)->saved_path, &buf) == -1 && stat((*lst)->path, &buf) == -1)
 	{
-		err_msg("cd: no such file or directory: ");
 		err_msg((*lst)->input);
-		err_msg("\n");
+		err_msg(": No such file or directory.\n");
 		lst_init_or_free(lst);
 		return ;
 	}
 	if (S_ISDIR(buf.st_mode))
 	{
-		err_msg("cd: permission denied: ");
 		err_msg((*lst)->input);
-		err_msg("\n");
+		err_msg(": Permission denied.\n");
 	}
 	else
 	{
-		err_msg("cd: not a directory: ");
 		err_msg((*lst)->input);
-		err_msg("\n");
+		err_msg(": Not a directory.\n");
 	}
 	lst_init_or_free(lst);
 }

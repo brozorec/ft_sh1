@@ -6,11 +6,12 @@
 /*   By: bbarakov <bbarakov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/23 15:29:46 by bbarakov          #+#    #+#             */
-/*   Updated: 2015/02/03 19:46:01 by bbarakov         ###   ########.fr       */
+/*   Updated: 2015/02/04 13:33:09 by bbarakov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "includes/ft_sh1.h"
+#include "ft_sh1.h"
+#include "ft_sh1_prototypes.h"
 
 void
 	lst_init_or_free(t_cd **lst)
@@ -38,10 +39,10 @@ void
 char
 	*second_try(char *name, char **env)
 {
-	char 			*path;
-	char 			*new_path;
-	char 			*truncated;
-	int				i;
+	char				*path;
+	char				*new_path;
+	char				*truncated;
+	int					i;
 
 	if ((path = lookup_paths("CDPATH=", name, env)) != 0)
 	{
@@ -112,9 +113,9 @@ void
 char
 	*take_env_var(char *var, char *addr, char **env)
 {
-	char 			*path;
-	int				cmp;
-	int				i;
+	char				*path;
+	int					cmp;
+	int					i;
 
 	i = 0;
 	cmp = ft_strlen(var);
@@ -132,4 +133,3 @@ char
 	}
 	return (0);
 }
-
