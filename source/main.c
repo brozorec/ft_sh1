@@ -6,7 +6,7 @@
 /*   By: bbarakov <bbarakov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/20 15:50:48 by bbarakov          #+#    #+#             */
-/*   Updated: 2015/02/04 17:35:12 by bbarakov         ###   ########.fr       */
+/*   Updated: 2015/02/05 14:35:24 by bbarakov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,10 @@ int			get_cmd(char *line, char ***cmd)
 	while ((*cmd)[i])
 	{
 		if (ft_strchr((*cmd)[i], '"'))
-			(*cmd)[i] = trim_quot_marks((*cmd)[i]);
+		{
+			if (((*cmd)[i] = trim_quot_marks((*cmd)[i])) == 0)
+				return (-1);
+		}
 		++i;
 	}
 	if (!ft_strcmp((*cmd)[0], "cd") || !ft_strcmp((*cmd)[0], "setenv") ||
@@ -55,6 +58,7 @@ void		signals(void)
 int			proceed(char ***env, char ***cmd, char **my_path)
 {
 	char		*line;
+	int			i;
 
 	ft_putstr("@>");
 	if (get_next_line(0, &line) == 0)
@@ -62,9 +66,9 @@ int			proceed(char ***env, char ***cmd, char **my_path)
 		ft_putstr("exit\n");
 		exit(0);
 	}
-	if (ft_strlen(line) == 0)
+	if (ft_strlen(line) == 0 || (i = get_cmd(line, cmd)) == -1)
 		return (1);
-	if (get_cmd(line, cmd) == 1)
+	if (i == 1)
 	{
 		opt_builtin(*cmd, env);
 		return (1);
@@ -73,7 +77,7 @@ int			proceed(char ***env, char ***cmd, char **my_path)
 		*my_path = ft_strdup((*cmd)[0]);
 	else if ((*my_path = lookup_paths("PATH=", (*cmd)[0], *env)) == 0)
 	{
-		err_msg(my_path);
+		err_msg((*cmd)[0]);
 		err_msg(": Command not found.\n");
 		return (1);
 	}
@@ -86,8 +90,6 @@ int			main(void)
 	char		**env;
 	char		**cmd;
 	char		*my_path;
-	pid_t		child;
-	// int			status;
 
 	signals();
 	env = 0;
@@ -97,7 +99,7 @@ int			main(void)
 	{
 		if (proceed(&env, &cmd, &my_path) == 1)
 			continue;
-		if ((child = fork()) == 0)
+		if (fork() == 0)
 		{
 			if (execve(my_path, cmd, env) == -1)
 			{
@@ -107,9 +109,6 @@ int			main(void)
 			}
 		}
 		wait(0);
-		// waitpid(child, &status, WUNTRACED);
-		// if (WIFSIGNALED(status))
-		// 	sig_handler(WTERMSIG(status));
 	}
 	return (0);
 }

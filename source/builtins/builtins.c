@@ -6,7 +6,7 @@
 /*   By: bbarakov <bbarakov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/21 19:22:17 by bbarakov          #+#    #+#             */
-/*   Updated: 2015/02/04 14:59:19 by bbarakov         ###   ########.fr       */
+/*   Updated: 2015/02/05 12:52:36 by bbarakov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,11 +30,14 @@ char		*trim_quot_marks(char *str)
 			++i;
 			continue;
 		}
-		new[j] = str[i];
-		++j;
-		++i;
+		new[j++] = str[i++];
 	}
 	free(str);
+	if ((i - j) % 2 != 0)
+	{
+		err_msg("Unmatched \".\n");
+		return (0);
+	}
 	return (new);
 }
 
@@ -94,7 +97,7 @@ void		opt_builtin(char **cmd, char ***env)
 	if (!ft_strcmp(cmd[0], "cd"))
 		cd_builtin(cmd, env);
 	else if (!ft_strcmp(cmd[0], "exit"))
-		exit_builtin(cmd);
+		exit_builtin(cmd, env);
 	else if (!ft_strcmp(cmd[0], "env"))
 		env_builtin(cmd, *env);
 	else if (!ft_strcmp(cmd[0], "setenv"))

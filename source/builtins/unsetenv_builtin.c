@@ -6,7 +6,7 @@
 /*   By: bbarakov <bbarakov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/21 19:22:17 by bbarakov          #+#    #+#             */
-/*   Updated: 2015/02/04 19:09:11 by bbarakov         ###   ########.fr       */
+/*   Updated: 2015/02/05 13:55:01 by bbarakov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int			proceed_unset(char *cmd, char ***env)
 		*env = 0;
 		return (0);
 	}
-	while ((*env)[i])
+	while (*env && (*env)[i])
 	{
 		if ((cmp = compare(cmd, (*env)[i])) != 0)
 		{

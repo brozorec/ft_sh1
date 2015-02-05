@@ -6,7 +6,7 @@
 /*   By: bbarakov <bbarakov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/26 19:50:44 by bbarakov          #+#    #+#             */
-/*   Updated: 2015/02/04 14:11:50 by bbarakov         ###   ########.fr       */
+/*   Updated: 2015/02/05 14:11:48 by bbarakov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,22 +51,30 @@ void		env_builtin(char **cmd, char **env)
 	wait(0);
 }
 
-void		exit_builtin(char **cmd)
+void		free_env_and_cmd(char **cmd, char ***env)
+{
+	ft_strdel(*env);
+	ft_strdel(cmd);
+}
+
+void		exit_builtin(char **cmd, char ***env)
 {
 	int			status;
 	int			i;
 
 	i = 0;
 	if (cmd[1] == 0)
+	{
+		free_env_and_cmd(cmd, env);
 		exit(0);
+	}
 	while (cmd[1][i])
 	{
-		if (ft_isdigit(cmd[1][i]) == 0)
+		if (ft_isdigit(cmd[1][i++]) == 0)
 		{
 			exit_err(i);
 			return ;
 		}
-		++i;
 	}
 	if (cmd[2] != 0)
 	{
@@ -74,5 +82,6 @@ void		exit_builtin(char **cmd)
 		return ;
 	}
 	status = ft_atoi(cmd[1]);
+	free_env_and_cmd(cmd, env);
 	exit(status);
 }

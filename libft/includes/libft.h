@@ -6,7 +6,7 @@
 /*   By: bbarakov <bbarakov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/03 15:52:04 by bbarakov          #+#    #+#             */
-/*   Updated: 2015/02/03 18:54:47 by bbarakov         ###   ########.fr       */
+/*   Updated: 2015/02/05 12:58:22 by bbarakov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,9 +70,9 @@ int					ft_strequ(char const *s1, char const *s2);
 int					ft_strnequ(char const *s1, char const *s2, size_t n);
 char				*ft_strsub(char const *s, unsigned int start, size_t len);
 char				*ft_strjoin(char const *s1, char const *s2);
-char                *ft_str3join(char const *a, char const *b, char const *c);
+char				*ft_str3join(char const *a, char const *b, char const *c);
 char				*ft_strtrim(char const *s);
-char                *ft_strtrim_quot_mark(char const *s);
+char				*ft_strtrim_quot_mark(char const *s);
 char				**ft_strsplit(char const *s, char c);
 char				*ft_itoa(int n);
 void				ft_putchar(char c);

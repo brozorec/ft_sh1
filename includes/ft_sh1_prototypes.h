@@ -6,7 +6,7 @@
 /*   By: bbarakov <bbarakov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/02/04 18:15:24 by bbarakov          #+#    #+#             */
-/*   Updated: 2015/02/04 19:07:43 by bbarakov         ###   ########.fr       */
+/*   Updated: 2015/02/05 14:08:17 by bbarakov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	setenv_builtin(char **cmd, char ***env);
 void	unsetenv_builtin(char **cmd, char ***env);
 void	env_builtin(char **cmd, char **env);
 void	print_env(char **env);
-void	exit_builtin(char **env);
+void	exit_builtin(char **cmd, char ***env);
 void	cd_builtin(char **cmd, char ***env);
 void	pwd_builtin(char **env);
 void	lst_init_or_free(t_cd **lst);

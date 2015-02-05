@@ -6,7 +6,7 @@
 /*   By: bbarakov <bbarakov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/02/03 18:40:41 by bbarakov          #+#    #+#             */
-/*   Updated: 2015/02/03 18:52:04 by bbarakov         ###   ########.fr       */
+/*   Updated: 2015/02/05 12:56:57 by bbarakov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,10 @@ char			*ft_strchr_rev(const char *s, int c)
 	if (s == 0)
 		return (0);
 	while (s[i] && s[i] != ch)
-    {
-        ++i;
+	{
+		++i;
 		++len;
-    }
+	}
 	str = (char *)malloc(len + 2);
 	str = ft_strncpy(str, s, len + 1);
 	return (str);

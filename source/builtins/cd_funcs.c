@@ -6,7 +6,7 @@
 /*   By: bbarakov <bbarakov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/23 15:29:46 by bbarakov          #+#    #+#             */
-/*   Updated: 2015/02/04 13:33:09 by bbarakov         ###   ########.fr       */
+/*   Updated: 2015/02/05 13:52:32 by bbarakov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,7 @@ char
 
 	i = 0;
 	cmp = ft_strlen(var);
-	while (env[i])
+	while (env && env[i])
 	{
 		if (ft_strncmp(env[i], var, cmp) == 0)
 		{

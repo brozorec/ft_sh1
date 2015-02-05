@@ -6,7 +6,7 @@
 /*   By: bbarakov <bbarakov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/02/04 15:29:07 by bbarakov          #+#    #+#             */
-/*   Updated: 2015/02/04 15:29:49 by bbarakov         ###   ########.fr       */
+/*   Updated: 2015/02/05 12:35:04 by bbarakov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ void		proceed_set(char **cmd, char ***env)
 	{
 		if (cmd[2] == 0)
 		{
-			if (ft_strchr(cmd[2], '='))
+			if (ft_strchr(cmd[1], '='))
 			{
 				err_msg("setenv: Syntax Error.\n");
 				return ;
