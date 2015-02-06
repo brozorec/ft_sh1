@@ -19,10 +19,11 @@ NAME=		ft_minishell1
 SRC=		source/main.c \
 			source/get_next_line.c \
 			source/paths.c \
+			source/common_funcs.c \
 			source/errors.c \
 			source/builtins/builtins.c \
 			source/builtins/cd_builtin.c \
-			source/builtins/cd_funcs.c \
+			source/builtins/cd_builtin2.c \
 			source/builtins/env_exit_builtins.c \
 			source/builtins/pwd_builtin.c \
 			source/builtins/setenv_builtin.c \
@@ -39,7 +40,7 @@ all: lib $(NAME)
 $(NAME): $(OBJ)
 	@$(CC) -o $@ $^ -I $(INCLUDES) -L $(LIBFT) $(CFLAGS)
 
-%.o: %.c 
+%.o: %.c
 	@$(CC) -o $@ -c $^ -I $(INCLUDES) -L $(LIBFT) $(CFLAGS)
 
 lib:

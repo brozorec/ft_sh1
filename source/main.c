@@ -6,34 +6,12 @@
 /*   By: bbarakov <bbarakov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/20 15:50:48 by bbarakov          #+#    #+#             */
-/*   Updated: 2015/02/05 14:35:24 by bbarakov         ###   ########.fr       */
+/*   Updated: 2015/02/06 18:18:29 by bbarakov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_sh1.h"
 #include "ft_sh1_prototypes.h"
-
-int			get_cmd(char *line, char ***cmd)
-{
-	int				i;
-
-	i = 1;
-	*cmd = ft_strsplit(line, ' ');
-	while ((*cmd)[i])
-	{
-		if (ft_strchr((*cmd)[i], '"'))
-		{
-			if (((*cmd)[i] = trim_quot_marks((*cmd)[i])) == 0)
-				return (-1);
-		}
-		++i;
-	}
-	if (!ft_strcmp((*cmd)[0], "cd") || !ft_strcmp((*cmd)[0], "setenv") ||
-		!ft_strcmp((*cmd)[0], "unsetenv") || !ft_strcmp((*cmd)[0], "exit") ||
-		!ft_strcmp((*cmd)[0], "env") || !ft_strcmp((*cmd)[0], "pwd"))
-		return (1);
-	return (0);
-}
 
 void		sig_handler(int sig)
 {
@@ -55,12 +33,25 @@ void		signals(void)
 	}
 }
 
-int			proceed(char ***env, char ***cmd, char **my_path)
+void		execute_command(char *my_path, char **cmd, char **env)
+{
+	if (fork() == 0)
+	{
+		if (execve(my_path, cmd, env) == -1)
+		{
+			err_msg(my_path);
+			err_msg(": Command not found.\n");
+			exit(127);
+		}
+	}
+	wait(0);
+}
+
+int			proceed(char ***env, char ***cmd, char **my_path, char ***saved)
 {
 	char		*line;
 	int			i;
 
-	ft_putstr("@>");
 	if (get_next_line(0, &line) == 0)
 	{
 		ft_putstr("exit\n");
@@ -70,12 +61,13 @@ int			proceed(char ***env, char ***cmd, char **my_path)
 		return (1);
 	if (i == 1)
 	{
-		opt_builtin(*cmd, env);
+		opt_builtin(*cmd, env, saved);
 		return (1);
 	}
 	if ((*cmd)[0][0] == '/' || (*cmd)[0][0] == '.')
 		*my_path = ft_strdup((*cmd)[0]);
-	else if ((*my_path = lookup_paths("PATH=", (*cmd)[0], *env)) == 0)
+	else if ((*my_path = lookup_paths("PATH=", (*cmd)[0], *env)) == 0
+		&& (*my_path = lookup_paths("PATH=", (*cmd)[0], *saved)) == 0)
 	{
 		err_msg((*cmd)[0]);
 		err_msg(": Command not found.\n");
@@ -90,25 +82,19 @@ int			main(void)
 	char		**env;
 	char		**cmd;
 	char		*my_path;
+	char		**saved;
 
 	signals();
 	env = 0;
 	cmd = 0;
+	saved = get_reserve_paths();
 	env = set_my_env(environ, 0, 0, 0);
 	while (1)
 	{
-		if (proceed(&env, &cmd, &my_path) == 1)
+		ft_putstr("@>");
+		if (proceed(&env, &cmd, &my_path, &saved) == 1)
 			continue;
-		if (fork() == 0)
-		{
-			if (execve(my_path, cmd, env) == -1)
-			{
-				err_msg(my_path);
-				err_msg(": Command not found.\n");
-				exit(127);
-			}
-		}
-		wait(0);
+		execute_command(my_path, cmd, env);
 	}
 	return (0);
 }

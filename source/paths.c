@@ -6,12 +6,32 @@
 /*   By: bbarakov <bbarakov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/20 15:50:48 by bbarakov          #+#    #+#             */
-/*   Updated: 2015/02/04 19:05:57 by bbarakov         ###   ########.fr       */
+/*   Updated: 2015/02/06 18:20:47 by bbarakov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_sh1.h"
 #include "ft_sh1_prototypes.h"
+
+char		**get_reserve_paths(void)
+{
+	int			fd;
+	char		*line;
+	char		**tab;
+
+	tab = (char **)malloc(2 * sizeof(char *));
+	tab[0] = ft_strdup("PATH=");
+	tab[1] = 0;
+	if ((fd = open("/etc/paths", O_RDONLY)) == -1)
+		fd = open("./source/builtins/path", O_RDONLY);
+	while (fd != -1 && get_next_line(fd, &line) != 0)
+	{
+		tab[0] = ft_realloc(tab[0], ft_strlen(line) + 1);
+		tab[0] = ft_strcat(tab[0], line);
+		tab[0] = ft_strcat(tab[0], ":");
+	}
+	return (tab);
+}
 
 char		*dir_content(char *path, char *name)
 {

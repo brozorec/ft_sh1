@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cd_funcs.c                                         :+:      :+:    :+:   */
+/*   cd_builtin2.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bbarakov <bbarakov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/23 15:29:46 by bbarakov          #+#    #+#             */
-/*   Updated: 2015/02/05 13:52:32 by bbarakov         ###   ########.fr       */
+/*   Updated: 2015/02/06 18:14:25 by bbarakov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,50 +86,4 @@ int
 		return (2);
 	}
 	return (1);
-}
-
-void
-	change_or_add_env_var(char *var, char *value, char ***env)
-{
-	int			i;
-	int			cmp;
-
-	i = 0;
-	cmp = ft_strlen(var);
-	while (*env && (*env)[i])
-	{
-		if (ft_strncmp((*env)[i], var, cmp) == 0)
-		{
-			free((*env)[i]);
-			(*env)[i] = 0;
-			(*env)[i] = ft_strjoin(var, value);
-			return ;
-		}
-		++i;
-	}
-	*env = set_my_env(*env, ft_strjoin(var, value), 0, 1);
-}
-
-char
-	*take_env_var(char *var, char *addr, char **env)
-{
-	char				*path;
-	int					cmp;
-	int					i;
-
-	i = 0;
-	cmp = ft_strlen(var);
-	while (env && env[i])
-	{
-		if (ft_strncmp(env[i], var, cmp) == 0)
-		{
-			if (addr)
-				path = ft_strjoin(&env[i][cmp], addr);
-			else
-				path = ft_strdup(&env[i][cmp]);
-			return (path);
-		}
-		++i;
-	}
-	return (0);
 }

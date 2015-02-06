@@ -92,7 +92,7 @@ char		**set_my_env(char **environ, char *str, int cmp, int flag)
 	return (env);
 }
 
-void		opt_builtin(char **cmd, char ***env)
+void		opt_builtin(char **cmd, char ***env, char ***saved)
 {
 	if (!ft_strcmp(cmd[0], "cd"))
 		cd_builtin(cmd, env);
@@ -101,7 +101,7 @@ void		opt_builtin(char **cmd, char ***env)
 	else if (!ft_strcmp(cmd[0], "env"))
 		env_builtin(cmd, *env);
 	else if (!ft_strcmp(cmd[0], "setenv"))
-		setenv_builtin(cmd, env);
+		setenv_builtin(cmd, env, saved);
 	else if (!ft_strcmp(cmd[0], "unsetenv"))
 		unsetenv_builtin(cmd, env);
 	else if (!ft_strcmp(cmd[0], "pwd"))
