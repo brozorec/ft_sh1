@@ -6,7 +6,7 @@
 /*   By: bbarakov <bbarakov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/03 15:52:04 by bbarakov          #+#    #+#             */
-/*   Updated: 2015/02/05 12:58:22 by bbarakov         ###   ########.fr       */
+/*   Updated: 2015/02/09 15:33:15 by bbarakov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,7 @@ char				*ft_str3join(char const *a, char const *b, char const *c);
 char				*ft_strtrim(char const *s);
 char				*ft_strtrim_quot_mark(char const *s);
 char				**ft_strsplit(char const *s, char c);
+char				**ft_str2split(char const *s, char c, char d);
 char				*ft_itoa(int n);
 void				ft_putchar(char c);
 void				ft_putstr(const char *s);

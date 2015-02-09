@@ -6,7 +6,7 @@
 /*   By: bbarakov <bbarakov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/26 19:50:44 by bbarakov          #+#    #+#             */
-/*   Updated: 2015/02/05 14:11:48 by bbarakov         ###   ########.fr       */
+/*   Updated: 2015/02/06 18:27:41 by bbarakov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,11 @@ void		env_builtin(char **cmd, char **env)
 	{
 		if (execve(path, cmd, env) == -1)
 		{
-			ft_putstr(cmd[2]);
+			if (cmd[2] == 0)
+				ft_putstr(cmd[1]);
+			else
+				ft_putstr(cmd[2]);
+			ft_putstr("\n");
 			exit(0);
 		}
 	}

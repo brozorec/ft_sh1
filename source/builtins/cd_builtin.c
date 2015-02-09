@@ -6,7 +6,7 @@
 /*   By: bbarakov <bbarakov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/28 18:40:14 by bbarakov          #+#    #+#             */
-/*   Updated: 2015/02/02 15:33:08 by bbarakov         ###   ########.fr       */
+/*   Updated: 2015/02/09 14:16:47 by bbarakov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ int
 	int				i;
 
 	if (cmd[1] == 0)
-		(*lst)->path = take_env_var("HOME=", 0, *env);
+		(*lst)->name = take_env_var("HOME=", 0, *env);
 	else if (cmd[1][0] == '-')
 	{
 		i = get_options_or_take_oldpwd(cmd[1], lst, *env, 1);
@@ -73,6 +73,8 @@ int
 	(*lst)->input = ft_strdup((*lst)->name);
 	(*lst)->path = construct_path(*lst, *env);
 	(*lst)->saved_path = ft_strdup((*lst)->path);
+	if (check_too_many_args(*lst, cmd) == 0)
+		return (0);
 	if ((examine_path(*lst, *env)) == 0)
 		return (0);
 	return (1);

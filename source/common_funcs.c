@@ -6,7 +6,7 @@
 /*   By: bbarakov <bbarakov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/02/06 18:09:00 by bbarakov          #+#    #+#             */
-/*   Updated: 2015/02/06 18:20:34 by bbarakov         ###   ########.fr       */
+/*   Updated: 2015/02/09 15:34:58 by bbarakov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,32 @@
 #include "ft_sh1_prototypes.h"
 
 int
-	get_cmd(char *line, char ***cmd)
+	check_if_home(char **cmd, char **env)
+{
+	if ((*cmd)[0] == '~')
+	{
+		if ((*cmd)[1] != 0 && (*cmd)[1] != '/')
+		{
+			err_msg("Unknown user: ");
+			err_msg(&(*cmd)[1]);
+			err_msg(".\n");
+			return (0);
+		}
+		ft_strdel(cmd);
+		*cmd = take_env_var("HOME=", ft_strchr(*cmd, '~') + 1, env);
+	}
+	return (1);
+}
+
+int
+	get_cmd(char *line, char ***cmd, char **env)
 {
 	int					i;
 
 	i = 1;
-	*cmd = ft_strsplit(line, ' ');
+	*cmd = ft_str2split(line, ' ', '\t');
+	if (**cmd == 0)
+		return (-1);
 	while ((*cmd)[i])
 	{
 		if (ft_strchr((*cmd)[i], '"'))
@@ -27,6 +47,8 @@ int
 			if (((*cmd)[i] = trim_quot_marks((*cmd)[i])) == 0)
 				return (-1);
 		}
+		if (check_if_home(&(*cmd)[i], env) == 0)
+			return (-1);
 		++i;
 	}
 	if (!ft_strcmp((*cmd)[0], "cd") || !ft_strcmp((*cmd)[0], "setenv") ||

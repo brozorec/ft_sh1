@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strsplit.c                                      :+:      :+:    :+:   */
+/*   ft_str2split.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bbarakov <bbarakov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2014/11/12 19:18:24 by bbarakov          #+#    #+#             */
-/*   Updated: 2014/11/15 16:49:47 by bbarakov         ###   ########.fr       */
+/*   Created: 2015/02/09 15:27:17 by bbarakov          #+#    #+#             */
+/*   Updated: 2015/02/09 15:32:38 by bbarakov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static char		*str_cut(char *str, char c, int *j)
+static char		*str_cut(char *str, char c, char d, int *j)
 {
 	int		i;
 	int		len;
@@ -20,9 +20,9 @@ static char		*str_cut(char *str, char c, int *j)
 
 	i = 0;
 	len = 0;
-	while (str && str[i] == c)
+	while (str && (str[i] == c || str[i] == d))
 		i++;
-	while (str && str[i] != c && str[i] != '\0')
+	while (str && str[i] != c && str[i] != d && str[i] != '\0')
 	{
 		len++;
 		i++;
@@ -35,7 +35,7 @@ static char		*str_cut(char *str, char c, int *j)
 	return (new);
 }
 
-static int		member_count(char *str, char c)
+static int		member_count(char *str, char c, char d)
 {
 	int		i;
 	int		j;
@@ -46,7 +46,7 @@ static int		member_count(char *str, char c)
 	while (str[i])
 	{
 		j = 0;
-		while (str[i] != c && str[i] != '\0')
+		while (str[i] != c && str[i] != d && str[i] != '\0')
 		{
 			j++;
 			i++;
@@ -59,7 +59,7 @@ static int		member_count(char *str, char c)
 	return (count);
 }
 
-char			**ft_strsplit(char const *s, char c)
+char			**ft_str2split(char const *s, char c, char d)
 {
 	char	**tab;
 	char	*copy;
@@ -70,7 +70,7 @@ char			**ft_strsplit(char const *s, char c)
 	if (!s)
 		return (0);
 	copy = (char *)s;
-	len = member_count(copy, c);
+	len = member_count(copy, c, d);
 	tab = (char **)malloc(sizeof(*tab) * (len + 1));
 	if (tab == 0)
 		return (0);
@@ -78,7 +78,7 @@ char			**ft_strsplit(char const *s, char c)
 	j = 0;
 	while (i < len)
 	{
-		tab[i] = str_cut(copy + j, c, &j);
+		tab[i] = str_cut(copy + j, c, d, &j);
 		i++;
 	}
 	tab[len] = 0;

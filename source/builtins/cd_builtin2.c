@@ -6,7 +6,7 @@
 /*   By: bbarakov <bbarakov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/23 15:29:46 by bbarakov          #+#    #+#             */
-/*   Updated: 2015/02/06 18:14:25 by bbarakov         ###   ########.fr       */
+/*   Updated: 2015/02/09 14:19:30 by bbarakov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,29 @@ void
 		free((*lst)->saved_path);
 		free(*lst);
 	}
+}
+
+int
+	check_too_many_args(t_cd *lst, char **cmd)
+{
+	int 		i;
+
+	i = 0;
+	while (cmd && cmd[i])
+	{
+		if (lst->opt_l == 0 && lst->opt_p == 0 && i > 1)
+		{
+			err_msg("cd: Too many arguments.\n");
+			return (0);
+		}
+		else if ((lst->opt_l || lst->opt_p) && i > 2)
+		{
+			err_msg("cd: Too many arguments.\n");
+			return (0);
+		}
+		++i;
+	}
+	return (1);
 }
 
 char
