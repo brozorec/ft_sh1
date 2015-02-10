@@ -6,38 +6,35 @@
 /*   By: bbarakov <bbarakov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/20 15:50:48 by bbarakov          #+#    #+#             */
-/*   Updated: 2015/02/09 20:14:48 by bbarakov         ###   ########.fr       */
+/*   Updated: 2015/02/10 18:52:54 by bbarakov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_sh1.h"
 #include "ft_sh1_prototypes.h"
 
-void		sig_handler(int sig)
+void		examine_status(int status, pid_t child)
 {
-	if (sig <= 31 && sig != 20)
+	if (WIFSTOPPED(status))
+		kill(child, 3);
+	else if (WIFEXITED(status))
+		ft_putstr("e>");
+	else if (WIFSIGNALED(status))
 	{
-		ft_putstr("\n?>");
-		return ;
-	}
-	// signal(sig, SIG_DFL);
-// 	if (sig == 11)
-// 	{
-// 		ft_putstr("bus\n");
-// 		signal(11, SIG_DFL);
-// 	}
-}
-
-void		signals(void)
-{
-	int			i;
-
-	i = 1;
-	while (i <= 31)
-	{
-		// if (i != 11 && i != 10)
-		signal(i, sig_handler);
-		++i;
+		if (WTERMSIG(status) != 2 && WTERMSIG(status) != 3 &&
+			WTERMSIG(status) != 18 && WTERMSIG(status) != 10 &&
+			WTERMSIG(status) != 11)
+			ft_putstr("s>");
+		if (WTERMSIG(status) == 10)
+		{
+			err_msg("Bus error\n");
+			ft_putstr("@>");
+		}
+		if (WTERMSIG(status) == 11)
+		{
+			err_msg("Segmentation fault\n");
+			ft_putstr("@>");
+		}
 	}
 }
 
@@ -56,10 +53,9 @@ void		execute_command(char *my_path, char **cmd, char **env)
 		}
 	}
 	waitpid(child, &status, WUNTRACED);
-	if (WIFEXITED(status))
-		ft_putstr("*>");
-	if (WIFSTOPPED(status))
-		kill(child, 3);
+	// while (wait(&status) != -1)
+	// 	continue ;
+	examine_status(status, child);
 }
 
 int			proceed(char ***env, char ***cmd, char **my_path, char ***saved)
@@ -100,7 +96,6 @@ int			main(void)
 	char		**saved;
 
 	signals();
-	// signal(10, SIG_DFL);
 	env = 0;
 	saved = get_reserve_paths();
 	env = set_my_env(environ, 0, 0, 0);

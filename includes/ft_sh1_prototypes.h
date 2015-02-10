@@ -6,13 +6,14 @@
 /*   By: bbarakov <bbarakov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/02/04 18:15:24 by bbarakov          #+#    #+#             */
-/*   Updated: 2015/02/09 14:19:04 by bbarakov         ###   ########.fr       */
+/*   Updated: 2015/02/10 13:03:48 by bbarakov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FT_SH1_PROTOTYPES_H
 # define FT_SH1_PROTOTYPES_H
 
+void	signals(void);
 char	*lookup_paths(char *var, char *name, char **env);
 char	**get_paths(char *var, char **env);
 char	**get_reserve_paths(void);
