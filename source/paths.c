@@ -6,14 +6,14 @@
 /*   By: bbarakov <bbarakov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/20 15:50:48 by bbarakov          #+#    #+#             */
-/*   Updated: 2015/02/06 18:20:47 by bbarakov         ###   ########.fr       */
+/*   Updated: 2015/02/23 16:32:01 by bbarakov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_sh1.h"
 #include "ft_sh1_prototypes.h"
 
-char		**get_reserve_paths(void)
+char		**get_reserved_paths(void)
 {
 	int			fd;
 	char		*line;

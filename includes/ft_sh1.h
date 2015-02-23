@@ -6,7 +6,7 @@
 /*   By: bbarakov <bbarakov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/20 15:51:32 by bbarakov          #+#    #+#             */
-/*   Updated: 2015/02/04 18:18:37 by bbarakov         ###   ########.fr       */
+/*   Updated: 2015/02/23 17:44:35 by bbarakov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,5 +33,11 @@ typedef struct			s_cd
 	char				new_dir[4096];
 	char				old_dir[4096];
 }						t_cd;
+
+typedef struct			s_reserved
+{
+	char				**paths;
+	char				*home;
+}						t_res;
 
 #endif

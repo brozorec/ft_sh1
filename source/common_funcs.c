@@ -6,16 +6,30 @@
 /*   By: bbarakov <bbarakov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/02/06 18:09:00 by bbarakov          #+#    #+#             */
-/*   Updated: 2015/02/09 15:34:58 by bbarakov         ###   ########.fr       */
+/*   Updated: 2015/02/23 17:29:23 by bbarakov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_sh1.h"
 #include "ft_sh1_prototypes.h"
 
-int
-	check_if_home(char **cmd, char **env)
+t_res
+	*get_reserved(char **env)
 {
+	t_res				*res;
+
+	res = 0;
+	res = (t_res *)malloc(sizeof(t_res));
+	res->paths = get_reserved_paths();
+	res->home = take_env_var("HOME=", 0, env);
+	return (res);
+}
+
+int
+	check_if_home(char **cmd, char **env, t_res **res)
+{
+	char				*copy;
+
 	if ((*cmd)[0] == '~')
 	{
 		if ((*cmd)[1] != 0 && (*cmd)[1] != '/')
@@ -25,14 +39,18 @@ int
 			err_msg(".\n");
 			return (0);
 		}
+		copy = ft_strdup(*cmd);
 		ft_strdel(cmd);
-		*cmd = take_env_var("HOME=", ft_strchr(*cmd, '~') + 1, env);
+		*cmd = take_env_var("HOME=", ft_strchr(copy, '~') + 1, env);
+		if (*cmd == 0)
+			*cmd = ft_strjoin((*res)->home, ft_strchr(copy, '~') + 1);
+		free(copy);
 	}
 	return (1);
 }
 
 int
-	get_cmd(char *line, char ***cmd, char **env)
+	get_cmd(char *line, char ***cmd, char **env, t_res **res)
 {
 	int					i;
 
@@ -47,7 +65,7 @@ int
 			if (((*cmd)[i] = trim_quot_marks((*cmd)[i])) == 0)
 				return (-1);
 		}
-		if (check_if_home(&(*cmd)[i], env) == 0)
+		else if (check_if_home(&(*cmd)[i], env, res) == 0)
 			return (-1);
 		++i;
 	}
