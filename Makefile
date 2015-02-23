@@ -20,6 +20,7 @@ SRC=		source/main.c \
 			source/get_next_line.c \
 			source/paths.c \
 			source/common_funcs.c \
+			source/signals.c \
 			source/errors.c \
 			source/builtins/builtins.c \
 			source/builtins/cd_builtin.c \
