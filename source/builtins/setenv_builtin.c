@@ -6,7 +6,7 @@
 /*   By: bbarakov <bbarakov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/02/04 15:29:07 by bbarakov          #+#    #+#             */
-/*   Updated: 2015/02/06 18:04:46 by bbarakov         ###   ########.fr       */
+/*   Updated: 2015/02/23 17:07:42 by bbarakov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,6 @@ int			already_set(char **cmd, char ***env)
 		{
 			(*env)[i] = ft_realloc(cmd[1], ft_strlen(cmd[2]) + 2);
 			(*env)[i] = ft_strcat((*env)[i], "=");
-			if (cmd[2][0] == '~')
-				cmd[2] = take_env_var("HOME=", &cmd[2][1], *env);
 			(*env)[i] = ft_strcat((*env)[i], cmd[2]);
 			return (1);
 		}
@@ -58,16 +56,12 @@ void		proceed_set(char **cmd, char ***env)
 			var = ft_strcat(var, "=");
 		}
 		else if (cmd[3] == 0)
-		{
-			if (cmd[2][0] == '~')
-				cmd[2] = take_env_var("HOME=", &cmd[2][1], *env);
 			var = ft_str3join(cmd[1], "=", cmd[2]);
-		}
 		*env = set_my_env(*env, var, 0, 1);
 	}
 }
 
-void		setenv_builtin(char **cmd, char ***env, char ***saved)
+void		setenv_builtin(char **cmd, char ***env, t_res **res)
 {
 	if (cmd[1] == 0)
 	{
@@ -82,7 +76,12 @@ void		setenv_builtin(char **cmd, char ***env, char ***saved)
 	proceed_set(cmd, env);
 	if (ft_strcmp("PATH", cmd[1]) == 0)
 	{
-		ft_strdel(&(*saved)[0]);
-		(*saved)[0] = ft_strjoin("PATH=", take_env_var("PATH=", 0, *env));
+		ft_strdel((*res)->paths);
+		(*res)->paths[0] = ft_strjoin("PATH=", take_env_var("PATH=", 0, *env));
+	}
+	if (ft_strcmp("HOME", cmd[1]) == 0)
+	{
+		ft_strdel(&(*res)->home);
+		(*res)->home = ft_strjoin("HOME=", take_env_var("HOME=", 0, *env));
 	}
 }

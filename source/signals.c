@@ -6,7 +6,7 @@
 /*   By: bbarakov <bbarakov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/02/10 13:03:19 by bbarakov          #+#    #+#             */
-/*   Updated: 2015/02/10 19:04:43 by bbarakov         ###   ########.fr       */
+/*   Updated: 2015/02/23 17:09:45 by bbarakov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void		sig_handler(int sig)
 {
 	if (sig != 20)
 	{
-		ft_putstr("\na>");
+		ft_putstr("\n@>");
 		return ;
 	}
 	else

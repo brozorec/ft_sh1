@@ -6,7 +6,7 @@
 /*   By: bbarakov <bbarakov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/23 15:29:46 by bbarakov          #+#    #+#             */
-/*   Updated: 2015/02/09 14:19:30 by bbarakov         ###   ########.fr       */
+/*   Updated: 2015/02/23 17:43:49 by bbarakov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void
 int
 	check_too_many_args(t_cd *lst, char **cmd)
 {
-	int 		i;
+	int					i;
 
 	i = 0;
 	while (cmd && cmd[i])

@@ -6,7 +6,7 @@
 /*   By: bbarakov <bbarakov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/28 18:40:14 by bbarakov          #+#    #+#             */
-/*   Updated: 2015/02/09 14:16:47 by bbarakov         ###   ########.fr       */
+/*   Updated: 2015/02/23 17:20:33 by bbarakov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,14 +38,12 @@ int
 }
 
 char
-	*construct_path(t_cd *lst, char **env)
+	*construct_path(t_cd *lst)
 {
 	char			*path;
 
 	path = 0;
-	if (lst->name && lst->name[0] == '~')
-		path = take_env_var("HOME=", &(lst->name[1]), env);
-	else if (lst->name && lst->name[0] == '/')
+	if (lst->name && lst->name[0] == '/')
 		path = ft_strdup(lst->name);
 	else
 		path = ft_str3join(lst->old_dir, "/", lst->name);
@@ -53,12 +51,12 @@ char
 }
 
 int
-	cd_proceed(char **cmd, char ***env, t_cd **lst)
+	cd_proceed(char **cmd, char ***env, t_cd **lst, t_res **res)
 {
 	int				i;
 
 	if (cmd[1] == 0)
-		(*lst)->name = take_env_var("HOME=", 0, *env);
+		(*lst)->name = ft_strdup((*res)->home);
 	else if (cmd[1][0] == '-')
 	{
 		i = get_options_or_take_oldpwd(cmd[1], lst, *env, 1);
@@ -71,7 +69,7 @@ int
 	else
 		(*lst)->name = ft_strdup(cmd[1]);
 	(*lst)->input = ft_strdup((*lst)->name);
-	(*lst)->path = construct_path(*lst, *env);
+	(*lst)->path = construct_path(*lst);
 	(*lst)->saved_path = ft_strdup((*lst)->path);
 	if (check_too_many_args(*lst, cmd) == 0)
 		return (0);
@@ -96,14 +94,14 @@ int
 }
 
 void
-	cd_builtin(char **cmd, char ***env)
+	cd_builtin(char **cmd, char ***env, t_res **res)
 {
 	t_cd		*lst;
 
 	lst = 0;
 	lst_init_or_free(&lst);
 	getcwd(lst->old_dir, 4096);
-	if (cd_proceed(cmd, env, &lst) == 0)
+	if (cd_proceed(cmd, env, &lst, res) == 0)
 		return ;
 	if (chdir(lst->path) == -1)
 	{
