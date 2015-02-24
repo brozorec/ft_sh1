@@ -6,7 +6,7 @@
 /*   By: bbarakov <bbarakov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/02/06 18:09:00 by bbarakov          #+#    #+#             */
-/*   Updated: 2015/02/23 17:29:23 by bbarakov         ###   ########.fr       */
+/*   Updated: 2015/02/24 15:20:21 by bbarakov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ int
 	}
 	if (!ft_strcmp((*cmd)[0], "cd") || !ft_strcmp((*cmd)[0], "setenv") ||
 		!ft_strcmp((*cmd)[0], "unsetenv") || !ft_strcmp((*cmd)[0], "exit") ||
-		!ft_strcmp((*cmd)[0], "env") || !ft_strcmp((*cmd)[0], "pwd"))
+		!ft_strcmp((*cmd)[0], "env"))
 		return (1);
 	return (0);
 }

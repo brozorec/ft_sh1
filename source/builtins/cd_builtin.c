@@ -6,7 +6,7 @@
 /*   By: bbarakov <bbarakov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/28 18:40:14 by bbarakov          #+#    #+#             */
-/*   Updated: 2015/02/23 17:20:33 by bbarakov         ###   ########.fr       */
+/*   Updated: 2015/02/24 15:38:21 by bbarakov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "ft_sh1_prototypes.h"
 
 int
-	examine_path(t_cd *lst, char **env)
+	examine_path(t_cd *lst, char ***env)
 {
 	struct stat		buf;
 
@@ -23,13 +23,14 @@ int
 		lstat(lst->path, &buf);
 		if (S_ISLNK(buf.st_mode))
 		{
+			ft_putstr(lst->path);
 			if (chdir(lst->path) == -1)
 			{
 				cd_errors(&lst);
 				return (0);
 			}
-			change_or_add_env_var("PWD=", lst->path, &env);
-			change_or_add_env_var("OLDPWD=", lst->old_dir, &env);
+			change_or_add_env_var("PWD=", lst->path, env);
+			change_or_add_env_var("OLDPWD=", lst->old_dir, env);
 			lst_init_or_free(&lst);
 			return (0);
 		}
@@ -73,16 +74,16 @@ int
 	(*lst)->saved_path = ft_strdup((*lst)->path);
 	if (check_too_many_args(*lst, cmd) == 0)
 		return (0);
-	if ((examine_path(*lst, *env)) == 0)
+	if ((examine_path(*lst, env)) == 0)
 		return (0);
 	return (1);
 }
 
 int
-	failure_first_try(t_cd **lst, char **env)
+	failure_first_try(t_cd **lst, char ***env)
 {
 	free((*lst)->path);
-	(*lst)->path = second_try((*lst)->name, env);
+	(*lst)->path = second_try((*lst)->name, *env);
 	if (examine_path(*lst, env) == 0)
 		return (0);
 	if (chdir((*lst)->path) == -1)
@@ -100,12 +101,13 @@ void
 
 	lst = 0;
 	lst_init_or_free(&lst);
-	getcwd(lst->old_dir, 4096);
+	if (ft_strcpy(lst->old_dir, take_env_var("PWD=", 0, *env)) == 0)
+		getcwd(lst->old_dir, 4096);
 	if (cd_proceed(cmd, env, &lst, res) == 0)
 		return ;
 	if (chdir(lst->path) == -1)
 	{
-		if (failure_first_try(&lst, *env) == 0)
+		if (failure_first_try(&lst, env) == 0)
 			return ;
 	}
 	getcwd(lst->new_dir, 4096);
