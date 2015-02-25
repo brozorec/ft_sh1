@@ -6,7 +6,7 @@
 /*   By: bbarakov <bbarakov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/26 19:50:44 by bbarakov          #+#    #+#             */
-/*   Updated: 2015/02/25 16:15:46 by bbarakov         ###   ########.fr       */
+/*   Updated: 2015/02/25 17:14:48 by bbarakov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@ void		env_builtin(char **cmd, char **env)
 	char		*line;
 	char		*path;
 
-	path = 0;
 	if ((fd = open("/etc/paths", O_RDONLY)) == -1)
 		fd = open("./source/builtins/path", O_RDONLY);
 	while (fd != -1 && get_next_line(fd, &line) != 0)
