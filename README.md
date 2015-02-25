@@ -16,14 +16,19 @@ Builtins : cd, setenv, unsetenv, env, exit
 
 Mini-interpretator of UNIX commands
 
-Functionalities:
+Features:
 
 Printing of a prompt
 
-The command lines are simple: no pipes, no redirections or other advanced functionalities
+The command lines are simple: no pipes, no redirections or other advanced features
 
 The executables are those which can be found in the environment variable PATH
 
 Possibilities of execution of executables which are not present in PATH
 
 Builtins: cd, setenv, unsetenv, env, exit
+
+---------
+
+cd <dir>
+make
