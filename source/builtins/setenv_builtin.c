@@ -6,7 +6,7 @@
 /*   By: bbarakov <bbarakov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/02/04 15:29:07 by bbarakov          #+#    #+#             */
-/*   Updated: 2015/02/23 17:07:42 by bbarakov         ###   ########.fr       */
+/*   Updated: 2015/02/25 15:43:03 by bbarakov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,15 +22,14 @@ int			already_set(char **cmd, char ***env)
 	{
 		if (compare(cmd[1], (*env)[i]) > 0 && cmd[2] == 0)
 		{
-			(*env)[i] = ft_realloc(cmd[1], 2);
-			(*env)[i] = ft_strcat((*env)[i], "=");
+			free((*env)[i]);
+			(*env)[i] = ft_strjoin(cmd[1], "=");
 			return (1);
 		}
 		else if (compare(cmd[1], (*env)[i]) > 0 && cmd[3] == 0)
 		{
-			(*env)[i] = ft_realloc(cmd[1], ft_strlen(cmd[2]) + 2);
-			(*env)[i] = ft_strcat((*env)[i], "=");
-			(*env)[i] = ft_strcat((*env)[i], cmd[2]);
+			free((*env)[i]);
+			(*env)[i] = ft_str3join(cmd[1], "=", cmd[2]);
 			return (1);
 		}
 		++i;
@@ -52,8 +51,7 @@ void		proceed_set(char **cmd, char ***env)
 				err_msg("setenv: Syntax Error.\n");
 				return ;
 			}
-			var = ft_realloc(cmd[1], 2);
-			var = ft_strcat(var, "=");
+			var = ft_strjoin(cmd[1], "=");
 		}
 		else if (cmd[3] == 0)
 			var = ft_str3join(cmd[1], "=", cmd[2]);

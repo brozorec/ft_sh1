@@ -51,7 +51,6 @@ void		cd_errors(t_cd **lst)
 	{
 		err_msg((*lst)->input);
 		err_msg(": No such file or directory.\n");
-		lst_init_or_free(lst);
 		return ;
 	}
 	if (S_ISDIR(buf.st_mode))
@@ -64,5 +63,4 @@ void		cd_errors(t_cd **lst)
 		err_msg((*lst)->input);
 		err_msg(": Not a directory.\n");
 	}
-	lst_init_or_free(lst);
 }

@@ -6,7 +6,7 @@
 /*   By: bbarakov <bbarakov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/20 15:50:48 by bbarakov          #+#    #+#             */
-/*   Updated: 2015/02/23 16:32:01 by bbarakov         ###   ########.fr       */
+/*   Updated: 2015/02/25 16:23:12 by bbarakov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ char		*lookup_paths(char *var, char *name, char **env)
 	char		*my_path;
 
 	i = 0;
+	tab_paths = 0;
 	tab_paths = get_paths(var, env);
 	while (tab_paths && tab_paths[i])
 	{

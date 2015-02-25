@@ -6,7 +6,7 @@
 /*   By: bbarakov <bbarakov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/26 19:50:44 by bbarakov          #+#    #+#             */
-/*   Updated: 2015/02/06 18:27:41 by bbarakov         ###   ########.fr       */
+/*   Updated: 2015/02/25 16:15:46 by bbarakov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ void		env_builtin(char **cmd, char **env)
 		if ((path = dir_content(line, "env")) != 0)
 			break ;
 	}
+	close(fd);
 	if (fork() == 0)
 	{
 		if (execve(path, cmd, env) == -1)

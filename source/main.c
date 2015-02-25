@@ -6,7 +6,7 @@
 /*   By: bbarakov <bbarakov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/20 15:50:48 by bbarakov          #+#    #+#             */
-/*   Updated: 2015/02/23 17:37:48 by bbarakov         ###   ########.fr       */
+/*   Updated: 2015/02/25 16:47:10 by bbarakov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,13 +103,11 @@ int			main(void)
 		cmd = 0;
 		my_path = 0;
 		if (proceed(&env, &cmd, &my_path, &res) == 1)
-		{
 			ft_putstr("@>");
-			ft_strdel(cmd);
-			free(my_path);
-			continue;
-		}
-		execute_command(my_path, cmd, env);
+		else
+			execute_command(my_path, cmd, env);
+		ft_strdel(cmd);
+		free(my_path);
 	}
 	return (0);
 }

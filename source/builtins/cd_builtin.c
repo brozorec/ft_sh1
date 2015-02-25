@@ -6,7 +6,7 @@
 /*   By: bbarakov <bbarakov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/28 18:40:14 by bbarakov          #+#    #+#             */
-/*   Updated: 2015/02/24 15:38:21 by bbarakov         ###   ########.fr       */
+/*   Updated: 2015/02/25 17:03:28 by bbarakov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ int
 		lstat(lst->path, &buf);
 		if (S_ISLNK(buf.st_mode))
 		{
-			ft_putstr(lst->path);
 			if (chdir(lst->path) == -1)
 			{
 				cd_errors(&lst);
@@ -31,7 +30,6 @@ int
 			}
 			change_or_add_env_var("PWD=", lst->path, env);
 			change_or_add_env_var("OLDPWD=", lst->old_dir, env);
-			lst_init_or_free(&lst);
 			return (0);
 		}
 	}
@@ -104,11 +102,17 @@ void
 	if (ft_strcpy(lst->old_dir, take_env_var("PWD=", 0, *env)) == 0)
 		getcwd(lst->old_dir, 4096);
 	if (cd_proceed(cmd, env, &lst, res) == 0)
+	{
+		lst_init_or_free(&lst);
 		return ;
+	}
 	if (chdir(lst->path) == -1)
 	{
 		if (failure_first_try(&lst, env) == 0)
+		{
+			lst_init_or_free(&lst);
 			return ;
+		}
 	}
 	getcwd(lst->new_dir, 4096);
 	change_or_add_env_var("PWD=", lst->new_dir, env);
