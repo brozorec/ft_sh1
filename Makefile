@@ -19,12 +19,15 @@ NAME=		ft_minishell1
 SRC=		source/main.c \
 			source/get_next_line.c \
 			source/paths.c \
-			source/common_funcs.c \
+			source/environ.c \
+			source/parser.c \
+			source/execution.c \
 			source/signals.c \
 			source/errors.c \
 			source/builtins/builtins.c \
 			source/builtins/cd_builtin.c \
-			source/builtins/cd_builtin2.c \
+			source/builtins/cd_builtin_funcs.c \
+			source/builtins/cd_builtin_paths.c \
 			source/builtins/env_exit_builtins.c \
 			source/builtins/pwd_builtin.c \
 			source/builtins/setenv_builtin.c \
@@ -42,7 +45,7 @@ $(NAME): $(OBJ)
 	@$(CC) -o $@ $^ -I $(INCLUDES) -L $(LIBFT) $(CFLAGS)
 
 %.o: %.c
-	@$(CC) -o $@ -c $^ -I $(INCLUDES) -L $(LIBFT) $(CFLAGS)
+	@$(CC) -o $@ -c $^ -I $(INCLUDES) $(CFLAGS)
 
 lib:
 	@make -C ./libft

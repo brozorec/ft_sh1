@@ -6,7 +6,7 @@
 /*   By: bbarakov <bbarakov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/20 15:50:48 by bbarakov          #+#    #+#             */
-/*   Updated: 2015/02/25 16:23:12 by bbarakov         ###   ########.fr       */
+/*   Updated: 2015/03/22 18:21:13 by bbarakov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ char		**get_reserved_paths(void)
 		tab[0] = ft_realloc(tab[0], ft_strlen(line) + 1);
 		tab[0] = ft_strcat(tab[0], line);
 		tab[0] = ft_strcat(tab[0], ":");
+		free(line);
 	}
 	return (tab);
 }
@@ -43,7 +44,8 @@ char		*dir_content(char *path, char *name)
 	{
 		while ((entry = readdir(dirp)) != 0)
 		{
-			if (ft_strcmp(entry->d_name, name) == 0)
+			if (ft_strcmp(name, ".") && ft_strcmp(name, "..")
+				&& ft_strcmp(entry->d_name, name) == 0)
 			{
 				my_path = ft_str3join(path, "/", name);
 				closedir(dirp);
@@ -56,41 +58,28 @@ char		*dir_content(char *path, char *name)
 	return (0);
 }
 
-char		**get_paths(char *var, char **env)
-{
-	int			i;
-	int			cmp;
-
-	i = 0;
-	cmp = ft_strlen(var);
-	while (env && env[i])
-	{
-		if (ft_strncmp(env[i], var, cmp) == 0)
-			return (ft_strsplit(&env[i][cmp], ':'));
-		++i;
-	}
-	return (0);
-}
-
 char		*lookup_paths(char *var, char *name, char **env)
 {
 	int			i;
 	char		**tab_paths;
+	char		*var_path;
 	char		*my_path;
 
 	i = 0;
 	tab_paths = 0;
-	tab_paths = get_paths(var, env);
+	var_path = 0;
+	var_path = take_env_var(var, 0, env);
+	tab_paths = ft_strsplit(var_path, ':');
+	free(var_path);
 	while (tab_paths && tab_paths[i])
 	{
 		if ((my_path = dir_content(tab_paths[i], name)) != 0)
 		{
-			ft_strdel(tab_paths);
+			ft_str3del(tab_paths);
 			return (my_path);
 		}
 		i++;
 	}
-	if (tab_paths)
-		ft_strdel(tab_paths);
+	ft_strdel(tab_paths);
 	return (0);
 }

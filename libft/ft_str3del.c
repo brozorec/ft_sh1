@@ -1,33 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strchr.c                                        :+:      :+:    :+:   */
+/*   ft_str3del.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bbarakov <bbarakov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2014/11/08 15:57:41 by bbarakov          #+#    #+#             */
-/*   Updated: 2015/03/22 18:54:28 by bbarakov         ###   ########.fr       */
+/*   Created: 2015/03/17 13:21:54 by bbarakov          #+#    #+#             */
+/*   Updated: 2015/03/22 16:06:50 by bbarakov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_strchr(const char *s, int c)
+void		ft_str3del(char **tab)
 {
-	char	*str;
-	char	ch;
+	int		i;
 
-	if (s == 0)
-		return (0);
-	str = (char *)s;
-	ch = (char)c;
-	while (*str)
+	i = 0;
+	while (tab && tab[i])
 	{
-		if (*str == ch)
-			return (str);
-		str++;
+		free(tab[i]);
+		++i;
 	}
-	if (*str == ch)
-		return (str);
-	return (0);
+	free(tab);
 }

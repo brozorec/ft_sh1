@@ -6,7 +6,7 @@
 /*   By: bbarakov <bbarakov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/02/04 15:29:07 by bbarakov          #+#    #+#             */
-/*   Updated: 2015/02/25 15:43:03 by bbarakov         ###   ########.fr       */
+/*   Updated: 2015/03/22 18:56:00 by bbarakov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,17 +42,15 @@ void		proceed_set(char **cmd, char ***env)
 	char		*var;
 
 	var = 0;
+	if (ft_strchr(cmd[1], '='))
+	{
+		err_msg("setenv: Syntax Error.\n");
+		return ;
+	}
 	if (already_set(cmd, env) == 0)
 	{
 		if (cmd[2] == 0)
-		{
-			if (ft_strchr(cmd[1], '='))
-			{
-				err_msg("setenv: Syntax Error.\n");
-				return ;
-			}
 			var = ft_strjoin(cmd[1], "=");
-		}
 		else if (cmd[3] == 0)
 			var = ft_str3join(cmd[1], "=", cmd[2]);
 		*env = set_my_env(*env, var, 0, 1);

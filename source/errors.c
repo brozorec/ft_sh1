@@ -6,7 +6,7 @@
 /*   By: bbarakov <bbarakov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/27 11:00:30 by bbarakov          #+#    #+#             */
-/*   Updated: 2015/01/31 17:00:47 by bbarakov         ###   ########.fr       */
+/*   Updated: 2015/03/19 18:08:03 by bbarakov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void		exit_err(int i)
 void		cd_options_err(char a)
 {
 	err_msg("ft_sh1: cd: -");
-	err_msg(&a);
+	ft_putchar_fd(a, 2);
 	err_msg(": invalid option\ncd: usage: cd [-L|-P] [dir]\n");
 }
 

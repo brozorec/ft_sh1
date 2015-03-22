@@ -6,7 +6,7 @@
 /*   By: bbarakov <bbarakov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/26 19:50:44 by bbarakov          #+#    #+#             */
-/*   Updated: 2015/02/25 17:14:48 by bbarakov         ###   ########.fr       */
+/*   Updated: 2015/03/22 16:07:19 by bbarakov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,23 +45,25 @@ void		env_builtin(char **cmd, char **env)
 		if (execve(path, cmd, env) == -1)
 		{
 			if (cmd[2] == 0)
-				ft_putstr(cmd[1]);
+				ft_putendl(cmd[1]);
 			else
-				ft_putstr(cmd[2]);
-			ft_putstr("\n");
+				ft_putendl(cmd[2]);
 			exit(0);
 		}
 	}
 	wait(0);
 }
 
-void		free_env_and_cmd(char **cmd, char ***env)
+void		free_env_cmd_res(char ***cmd, char ***env, t_res **res)
 {
-	ft_strdel(*env);
-	ft_strdel(cmd);
+	ft_str3del(*env);
+	ft_str3del(*cmd);
+	ft_str3del((*res)->paths);
+	free((*res)->home);
+	free((*res));
 }
 
-void		exit_builtin(char **cmd, char ***env)
+void		exit_builtin(char **cmd, char ***env, t_res *res)
 {
 	int			status;
 	int			i;
@@ -69,7 +71,7 @@ void		exit_builtin(char **cmd, char ***env)
 	i = 0;
 	if (cmd[1] == 0)
 	{
-		free_env_and_cmd(cmd, env);
+		free_env_cmd_res(&cmd, env, &res);
 		exit(0);
 	}
 	while (cmd[1][i])
@@ -86,6 +88,6 @@ void		exit_builtin(char **cmd, char ***env)
 		return ;
 	}
 	status = ft_atoi(cmd[1]);
-	free_env_and_cmd(cmd, env);
+	free_env_cmd_res(&cmd, env, &res);
 	exit(status);
 }
