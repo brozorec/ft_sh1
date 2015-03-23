@@ -6,40 +6,12 @@
 /*   By: bbarakov <bbarakov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/03/22 16:52:07 by bbarakov          #+#    #+#             */
-/*   Updated: 2015/03/22 16:52:09 by bbarakov         ###   ########.fr       */
+/*   Updated: 2015/03/23 18:08:17 by bbarakov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_sh1.h"
 #include "ft_sh1_prototypes.h"
-
-char		*trim_quot_marks(char *str)
-{
-	char		*new;
-	int			i;
-	int			j;
-
-	new = 0;
-	i = 0;
-	j = 0;
-	new = ft_strnew(ft_strlen(str));
-	while (str[i])
-	{
-		if (str[i] == '"')
-		{
-			++i;
-			continue;
-		}
-		new[j++] = str[i++];
-	}
-	free(str);
-	if ((i - j) % 2 != 0)
-	{
-		err_msg("Unmatched \".\n");
-		return (0);
-	}
-	return (new);
-}
 
 int
 	check_if_home(char **cmd, char **env, t_res **res)
@@ -66,25 +38,105 @@ int
 }
 
 int
+	unmatched_quot(char *line)
+{
+	int					i;
+	int					count;
+
+	i = 0;
+	count = 0;
+	while (line[i])
+	{
+		if (line[i] == '"')
+			++count;
+		++i;
+	}
+	if (count % 2 != 0)
+	{
+		err_msg("Unmatched \".\n");
+		return (-1);
+	}
+	return (0);
+}
+
+int
+	count_args(char *line)
+{
+	int					i;
+	int					count;
+
+	i = 0;
+	count = 0;
+	while (line[i])
+	{
+		while (line[i] && (line[i] == ' ' || line[i] == '\t'))
+			++i;
+		if (line[i] == '"')
+		{
+			++i;
+			i += ft_len_to_char(&line[i], '"', '"');
+			++count;
+		}
+		else if (line[i] != '\0')
+		{
+			i += ft_len_to_char(&line[i], ' ', '\t');
+			++count;
+		}
+		if (line[i] != '\0')
+			++i;
+	}
+	return (count);
+}
+
+char
+	**split_line(char *line, char **cmd)
+{
+	int					i;
+	int					j;
+	int					len;
+
+	i = 0;
+	j = 0;
+	len = 0;
+	while (line[i])
+	{
+		while (line[i] && (line[i] == ' ' || line[i] == '\t'))
+			++i;
+		if (line[i] == '"')
+			len = ft_len_to_char(&line[++i], '"', '"');
+		else if (line[i] != '\0')
+			len = ft_len_to_char(&line[i], ' ', '\t');
+		if (len != 0)
+		{
+			cmd[j++] = ft_strsub(line, i, len);
+			i += len;
+		}
+		len = 0;
+		if (line[i] != '\0')
+			++i;
+	}
+	return (cmd);
+}
+
+int
 	get_cmd(char *line, char ***cmd, char **env, t_res **res)
 {
 	int					i;
+	int					len;
 
 	i = 1;
-	*cmd = ft_str2split(line, ' ', '\t');
-	if (**cmd == 0)
+	if (unmatched_quot(line) == -1 || (len = count_args(line)) == 0)
 		return (-1);
+	*cmd = (char **)malloc(sizeof(char *) * (len + 1));
+	(*cmd)[len] = 0;
+	*cmd = split_line(line, *cmd);
 	while ((*cmd)[i])
 	{
-		if (ft_strchr((*cmd)[i], '"'))
-		{
-			if (((*cmd)[i] = trim_quot_marks((*cmd)[i])) == 0)
-				return (-1);
-		}
-		else if (check_if_home(&(*cmd)[i], env, res) == -1)
+		if (((*cmd)[i] = ft_trim_quot_marks((*cmd)[i])) == 0)
+			return (-1);
+		if (check_if_home(&(*cmd)[i], env, res) == -1)
 			return (-1);
 		++i;
 	}
-	free(line);
 	return (0);
 }

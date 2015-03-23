@@ -6,7 +6,7 @@
 /*   By: bbarakov <bbarakov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/02/04 18:15:24 by bbarakov          #+#    #+#             */
-/*   Updated: 2015/03/22 17:33:28 by bbarakov         ###   ########.fr       */
+/*   Updated: 2015/03/23 15:23:02 by bbarakov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,12 +38,12 @@ void	change_or_add_env_var(char *var, char *value, char ***env);
 char	*take_env_var(char *var, char *addr, char **env);
 int		get_options(char *cmd, t_cd **lst);
 int		take_oldpwd(char **cmd, t_cd **lst, char **env);
-// int		get_options_or_take_oldpwd(char *cmd, t_cd **lst, char **env, int i);
 char	*second_try(char *name, char **env);
 int		check_too_many_args(t_cd *lst, char **cmd);
 int		get_len(char **ptr, int flag);
 int		compare(char *cmd, char *env);
-char	*trim_quot_marks(char *str);
+char	*ft_trim_quot_marks(char *str);
+int		ft_len_to_char(char *str, char ch1, char ch2);
 void	err_msg(char *err);
 void	cd_errors(t_cd **lst);
 void	cd_options_err(char a);

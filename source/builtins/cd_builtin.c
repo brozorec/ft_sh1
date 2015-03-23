@@ -6,7 +6,7 @@
 /*   By: bbarakov <bbarakov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/28 18:40:14 by bbarakov          #+#    #+#             */
-/*   Updated: 2015/03/22 18:32:18 by bbarakov         ###   ########.fr       */
+/*   Updated: 2015/03/23 18:08:41 by bbarakov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,16 @@
 int
 	cd_proceed(char **cmd, char ***env, t_cd **lst, t_res **res)
 {
+	int					i;
+
 	if (cmd[1] == 0)
 		(*lst)->name = ft_strdup((*res)->home);
 	else if (cmd[1][0] == '-')
 	{
-		if (get_options(cmd[1], lst) == -1 || take_oldpwd(cmd, lst, *env) == -1)
+		if (get_options(cmd[1], lst) == -1 ||
+			(i = take_oldpwd(cmd, lst, *env)) == -1)
 			return (-1);
-		if (take_oldpwd(cmd, lst, *env) == 1)
+		if (i == 1)
 			return (0);
 		(*lst)->name = ft_strdup(cmd[2]);
 	}
@@ -46,9 +49,7 @@ char
 	int					i;
 
 	if ((path = lookup_paths("CDPATH=", name, env)) != 0)
-	{
 		return (path);
-	}
 	truncated = ft_strdup(ft_strchr(name, '/'));
 	i = ft_strlen(name) - ft_strlen(truncated);
 	ft_bzero(&name[i], ft_strlen(truncated));
@@ -56,8 +57,10 @@ char
 	{
 		new_path = ft_strjoin(path, truncated);
 		free(truncated);
+		free(path);
 		return (new_path);
 	}
+	free(truncated);
 	return (0);
 }
 
@@ -79,11 +82,14 @@ void
 	cd_builtin(char **cmd, char ***env, t_res **res)
 {
 	t_cd		*lst;
+	char		*oldpwd;
 
 	lst = 0;
 	lst_init_or_free(&lst);
-	if (ft_strcpy(lst->old_dir, take_env_var("PWD=", 0, *env)) == 0)
+	oldpwd = take_env_var("PWD=", 0, *env);
+	if (ft_strcpy(lst->old_dir, oldpwd) == 0)
 		getcwd(lst->old_dir, 4096);
+	free(oldpwd);
 	if (cd_proceed(cmd, env, &lst, res) == -1)
 	{
 		lst_init_or_free(&lst);

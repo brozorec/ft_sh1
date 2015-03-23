@@ -6,15 +6,14 @@
 /*   By: bbarakov <bbarakov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/03/22 16:46:13 by bbarakov          #+#    #+#             */
-/*   Updated: 2015/03/22 16:47:28 by bbarakov         ###   ########.fr       */
+/*   Updated: 2015/03/23 17:12:37 by bbarakov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_sh1.h"
 #include "ft_sh1_prototypes.h"
 
-void
-	change_or_add_env_var(char *var, char *value, char ***env)
+void		change_or_add_env_var(char *var, char *value, char ***env)
 {
 	int					i;
 	int					cmp;
@@ -35,8 +34,7 @@ void
 	*env = set_my_env(*env, ft_strjoin(var, value), 0, 1);
 }
 
-char
-	*take_env_var(char *var, char *addr, char **env)
+char		*take_env_var(char *var, char *addr, char **env)
 {
 	char				*path;
 	int					cmp;
@@ -84,10 +82,10 @@ void		finish_env(char **env_var, char **str, int flag)
 
 char		**set_my_env(char **environ, char *str, int cmp, int flag)
 {
-	int			i;
-	int			j;
-	int			len;
-	char		**env;
+	int					i;
+	int					j;
+	int					len;
+	char				**env;
 
 	i = 0;
 	j = 0;
@@ -106,6 +104,6 @@ char		**set_my_env(char **environ, char *str, int cmp, int flag)
 	finish_env(&env[j], &str, flag);
 	env[len] = 0;
 	if (flag != 0)
-		ft_strdel(environ);
+		ft_str3del(environ);
 	return (env);
 }

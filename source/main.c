@@ -6,7 +6,7 @@
 /*   By: bbarakov <bbarakov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/20 15:50:48 by bbarakov          #+#    #+#             */
-/*   Updated: 2015/03/22 16:06:17 by bbarakov         ###   ########.fr       */
+/*   Updated: 2015/03/23 16:22:49 by bbarakov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,11 @@ int			proceed(char ***cmd, char ***env, t_res **res)
 	if (get_next_line(0, &line) == 0)
 		exit_eof(cmd, env, res);
 	if (ft_strlen(line) == 0 || get_cmd(line, cmd, *env, res) == -1)
+	{
+		free(line);
 		return (1);
+	}
+	free(line);
 	if (builtins(*cmd, env, res) == 1)
 		return (1);
 	return (0);
@@ -46,7 +50,7 @@ int			proceed(char ***cmd, char ***env, t_res **res)
 
 int			main(void)
 {
-	extern char 		**environ;
+	extern char			**environ;
 	char				**env;
 	char				**cmd;
 	t_res				*res;

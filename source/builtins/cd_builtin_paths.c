@@ -6,7 +6,7 @@
 /*   By: bbarakov <bbarakov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/03/22 14:22:45 by bbarakov          #+#    #+#             */
-/*   Updated: 2015/03/22 18:42:37 by bbarakov         ###   ########.fr       */
+/*   Updated: 2015/03/23 15:47:57 by bbarakov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,8 +82,11 @@ char		*construct_path(t_cd *lst)
 
 	path = 0;
 	i = ft_strlen(lst->name) - 1;
-	if (lst->name && lst->name[i] == '/' && i != 0)
+	while (i > 0 && lst->name[i] == '/')
+	{
 		lst->name[i] = '\0';
+		--i;
+	}
 	if (lst->name && lst->name[0] == '/')
 		path = ft_strdup(lst->name);
 	else

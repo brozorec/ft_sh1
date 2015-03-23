@@ -6,7 +6,7 @@
 /*   By: bbarakov <bbarakov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/20 15:50:48 by bbarakov          #+#    #+#             */
-/*   Updated: 2015/03/22 18:21:13 by bbarakov         ###   ########.fr       */
+/*   Updated: 2015/03/23 16:26:03 by bbarakov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,6 @@ char		*lookup_paths(char *var, char *name, char **env)
 		}
 		i++;
 	}
-	ft_strdel(tab_paths);
+	ft_str3del(tab_paths);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: bbarakov <bbarakov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/03/22 17:15:13 by bbarakov          #+#    #+#             */
-/*   Updated: 2015/03/22 18:46:20 by bbarakov         ###   ########.fr       */
+/*   Updated: 2015/03/23 17:53:59 by bbarakov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ char		*path_to_exec(char **cmd, char **env, t_res *res)
 	path = 0;
 	if (cmd[0][0] == '/' || cmd[0][0] == '.')
 		path = ft_strdup(cmd[0]);
-	else if ((path = lookup_paths("PATH=", cmd[0], env))== 0
+	else if ((path = lookup_paths("PATH=", cmd[0], env)) == 0
 		&& (path = lookup_paths("PATH=", cmd[0], res->paths)) == 0)
 	{
 		err_msg(cmd[0]);
@@ -69,10 +69,12 @@ void		execute_command(char **cmd, char **env, t_res *res)
 		if (execve(path, cmd, env) == -1)
 		{
 			err_msg(path);
+			free(path);
 			err_msg(": Command not found.\n");
 			exit(127);
 		}
 	}
 	waitpid(child, &status, WUNTRACED);
 	examine_status(status, child);
+	free(path);
 }

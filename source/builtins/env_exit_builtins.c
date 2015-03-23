@@ -6,7 +6,7 @@
 /*   By: bbarakov <bbarakov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/26 19:50:44 by bbarakov          #+#    #+#             */
-/*   Updated: 2015/03/22 16:07:19 by bbarakov         ###   ########.fr       */
+/*   Updated: 2015/03/23 16:52:28 by bbarakov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,18 @@ void		print_env(char **env)
 	}
 }
 
+void		fork_env(char *path, char **cmd, char **env)
+{
+	if (fork() == 0)
+	{
+		if (execve(path, cmd, env) == -1)
+		{
+			ft_putendl(cmd[1]);
+			exit(0);
+		}
+	}
+}
+
 void		env_builtin(char **cmd, char **env)
 {
 	int			fd;
@@ -37,21 +49,16 @@ void		env_builtin(char **cmd, char **env)
 	while (fd != -1 && get_next_line(fd, &line) != 0)
 	{
 		if ((path = dir_content(line, "env")) != 0)
+		{
+			free(line);
 			break ;
+		}
+		free(line);
 	}
 	close(fd);
-	if (fork() == 0)
-	{
-		if (execve(path, cmd, env) == -1)
-		{
-			if (cmd[2] == 0)
-				ft_putendl(cmd[1]);
-			else
-				ft_putendl(cmd[2]);
-			exit(0);
-		}
-	}
+	fork_env(path, cmd, env);
 	wait(0);
+	free(path);
 }
 
 void		free_env_cmd_res(char ***cmd, char ***env, t_res **res)
