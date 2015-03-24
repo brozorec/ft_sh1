@@ -6,7 +6,7 @@
 /*   By: bbarakov <bbarakov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/02/04 15:29:07 by bbarakov          #+#    #+#             */
-/*   Updated: 2015/03/23 17:41:31 by bbarakov         ###   ########.fr       */
+/*   Updated: 2015/03/24 12:37:28 by bbarakov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,8 @@ void		proceed_set(char **cmd, char ***env)
 
 void		setenv_builtin(char **cmd, char ***env, t_res **res)
 {
+	char		*path;
+
 	if (cmd[1] == 0)
 	{
 		print_env(*env);
@@ -72,8 +74,10 @@ void		setenv_builtin(char **cmd, char ***env, t_res **res)
 	proceed_set(cmd, env);
 	if (ft_strcmp("PATH", cmd[1]) == 0)
 	{
-		ft_str3del((*res)->paths);
-		(*res)->paths[0] = ft_strjoin("PATH=", take_env_var("PATH=", 0, *env));
+		free((*res)->paths[0]);
+		path = take_env_var("PATH=", 0, *env);
+		(*res)->paths[0] = ft_strjoin("PATH=", path);
+		free(path);
 	}
 	if (ft_strcmp("HOME", cmd[1]) == 0)
 	{

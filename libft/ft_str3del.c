@@ -6,7 +6,7 @@
 /*   By: bbarakov <bbarakov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/03/17 13:21:54 by bbarakov          #+#    #+#             */
-/*   Updated: 2015/03/22 16:06:50 by bbarakov         ###   ########.fr       */
+/*   Updated: 2015/03/24 11:51:20 by bbarakov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,5 +22,6 @@ void		ft_str3del(char **tab)
 		free(tab[i]);
 		++i;
 	}
-	free(tab);
+	if (tab)
+		free(tab);
 }

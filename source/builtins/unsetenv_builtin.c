@@ -6,7 +6,7 @@
 /*   By: bbarakov <bbarakov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/21 19:22:17 by bbarakov          #+#    #+#             */
-/*   Updated: 2015/02/23 17:39:46 by bbarakov         ###   ########.fr       */
+/*   Updated: 2015/03/24 12:31:22 by bbarakov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ int			proceed_unset(char *cmd, char ***env)
 	i = 0;
 	if (ft_strcmp(cmd, "*") == 0)
 	{
+		ft_str3del(*env);
 		*env = 0;
 		return (0);
 	}

@@ -6,7 +6,7 @@
 /*   By: bbarakov <bbarakov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/11 13:12:16 by bbarakov          #+#    #+#             */
-/*   Updated: 2015/03/13 13:42:57 by bbarakov         ###   ########.fr       */
+/*   Updated: 2015/03/24 12:49:56 by bbarakov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,6 @@
 
 void	ft_strdel(char **as)
 {
-	int	i;
-
-	i = 0;
 	if (as && *as)
 	{
 		free(*as);
