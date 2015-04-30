@@ -1,3 +1,23 @@
+# ft_sh1
+
+---------
+
+Mini-interpretator of UNIX commands
+
+Features:
+
+Printing a prompt
+
+The command lines should be simple: no pipes, no redirections or other advanced features
+
+The executables are those which can be found in the environment variable PATH
+
+Possibilities of execution of executables which are not present in PATH
+
+Builtins: cd, setenv, unsetenv, env, exit
+
+---------
+
 Mini-interpréteur de commandes UNIX
 
 Fonctionnalités :
@@ -14,21 +34,8 @@ Builtins : cd, setenv, unsetenv, env, exit
 
 ---------
 
-Mini-interpretator of UNIX commands
+Usage:
 
-Features:
+-> make
 
-Printing of a prompt
-
-The command lines are simple: no pipes, no redirections or other advanced features
-
-The executables are those which can be found in the environment variable PATH
-
-Possibilities of execution of executables which are not present in PATH
-
-Builtins: cd, setenv, unsetenv, env, exit
-
----------
-
-cd <dir>
-make
+-> ./ft_sh1
