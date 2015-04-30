@@ -8,7 +8,7 @@ Features:
 
 Printing a prompt
 
-The command lines should be simple: no pipes, no redirections or other advanced features
+The commands should be simple: no pipes, no redirections or other advanced features
 
 The executables are those which can be found in the environment variable PATH
 
